@@ -1,7 +1,4 @@
 """Main app module"""
-# Built-In
-import asyncio
-
 # Third-Party
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse

@@ -1,6 +1,6 @@
 """Config Mongo database instance"""
 # Third-Party
-from mongoengine import connect, disconnect
+from mongoengine import connect, disconnect  # pylint: disable=unused-import
 
 # App
 from app.config import settings
