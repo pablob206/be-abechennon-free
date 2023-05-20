@@ -1,4 +1,4 @@
-"""Settings utilities functions"""
+"""Settings utilities module"""
 # Built-In
 from typing import List
 
