@@ -6,6 +6,7 @@ SQLAlchemy~=1.4.41
 pydantic~=1.10.7
 aiohttp~=3.8.4
 aiomysql~=0.1.1
+mongoengine~=0.27.0
 orjson~=3.8.12
 python-multipart~=0.0.6
 alembic~=1.11.1

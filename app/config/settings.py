@@ -32,6 +32,8 @@ class Settings(BaseSettings):
     MONGO_HOST: str
     MONGO_PORT: int
 
+    SECRET_KEY: str
+
     class Config:
         """Config class Pydantic"""
 
