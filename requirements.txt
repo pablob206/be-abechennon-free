@@ -10,5 +10,4 @@ mongoengine~=0.27.0
 orjson~=3.8.12
 python-multipart~=0.0.6
 alembic~=1.11.1
-pycryptodome~=3.18.0
 cryptography~=40.0.2
