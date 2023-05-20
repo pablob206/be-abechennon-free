@@ -3,7 +3,6 @@
 from typing import TypeVar
 
 # Third-Party
-from Crypto.Cipher import AES
 from pydantic import BaseModel
 
 # App
