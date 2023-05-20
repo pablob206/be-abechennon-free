@@ -5,7 +5,8 @@ from typing import List
 
 # Third-Party
 from fastapi import HTTPException
-from binance import BinanceSocketManager
+from binance import BinanceSocketManager  # type: ignore[attr-defined]
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
 from app.models import KlineIntervalEnum, MdLogs
@@ -36,16 +37,16 @@ async def build_stream_name(
     return stream_name_ls
 
 
-async def initialize_ws_binance_client():
+async def initialize_ws_binance_client(db_session: AsyncSession, _id: int | None = 1):
     """
     Initialize websocket from binance client
     """
 
-    binance_status = await get_settings_status()
+    binance_status = await get_settings_status(_id=_id, db_session=db_session)
     if "error_fields" in binance_status:
         raise HTTPException(400, f"Missing field: {binance_status.get('error_fields')}")
 
-    binance_settings = await get_settings()
+    binance_settings = await get_settings(_id=_id, db_session=db_session)
 
     kline_stream_list = await build_stream_name(
         symbol_list=binance_settings.get("pairsList"),
@@ -70,35 +71,35 @@ async def initialize_ws_binance_client():
     #     requests_params={"timeout": 20}
     # )
     client = (
-        binance_client.__call__()
+        binance_client()
     )  # <binance.client.AsyncClient object at 0x7f3a8824a5f0> <class 'binance.client.AsyncClient'>
     print(client, type(client))
 
-    bm = BinanceSocketManager(client, user_timeout=60)
-    ms = bm.multiplex_socket(kline_stream_list)
+    bsm = BinanceSocketManager(client, user_timeout=60)
+    m_socket = bsm.multiplex_socket(kline_stream_list)
 
     count = 0
-    async with ms as ms_listener:
+    async with m_socket as ms_listener:
         while True:
             count += 1
             resp = (
                 await ms_listener.recv()
             )  # {'stream': 'adausdt@kline_1m', 'data': {'e': 'kline', 'E': 1670257782485,
-            # 's': 'ADAUSDT', 'k': {'t': 1670257740000, 'T': 1670257799999, 's': 'ADAUSDT', 'i': '1m',
-            # 'f': 418874080, 'L': 418874096, 'o': '0.32040000', 'c': '0.32030000', 'h': '0.32040000',
-            # 'l': '0.32030000', 'v': '6994.90000000', 'n': 17, 'x': False, 'q': '2241.10655000',
-            # 'V': '2508.80000000', 'Q': '803.81952000', 'B': '0'}}}
+            # 's': 'ADAUSDT', 'k': {'t': 1670257740000, 'T': 1670257799999, 's': 'ADAUSDT',
+            #  'i': '1m', 'f': 418874080, 'L': 418874096, 'o': '0.32040000', 'c': '0.32030000',
+            # 'h': '0.32040000', 'l': '0.32030000', 'v': '6994.90000000', 'n': 17, 'x': False,
+            # 'q': '2241.10655000', 'V': '2508.80000000', 'Q': '803.81952000', 'B': '0'}}}
             resp = resp.get("data")
 
             if "k" in resp:
-                eventType, eventTime, symbol, ticks = resp.values()
+                event_type, event_time, symbol, ticks = resp.values()
                 if ticks.get("x"):
-                    print(count, eventType, eventTime, symbol, ticks)
+                    print(count, event_type, event_time, symbol, ticks)
                     log = MdLogs(
-                        eventType=eventType,
-                        eventTime=eventTime,
+                        eventType=event_type,
+                        eventTime=event_time,
                         intervalKline=(
-                            ticks.get("i") if eventType == "kline" else None
+                            ticks.get("i") if event_type == "kline" else None
                         ),
                         datetimeAt=datetime.utcnow(),
                         symbol=symbol,

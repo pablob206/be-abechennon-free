@@ -1,6 +1,6 @@
 """Binance client module"""
 # Third-party
-from binance import AsyncClient
+from binance import AsyncClient  # type: ignore[attr-defined]
 
 # App
 from app.config import settings
@@ -13,6 +13,8 @@ class BinanceClient:
 
     def __init__(self, **kwargs) -> None:
         self.options = kwargs
+        self.client = None
+        self.session = None
 
     async def start(self) -> None:
         """Start client"""

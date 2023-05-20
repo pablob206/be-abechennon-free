@@ -8,7 +8,7 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
-from app.models import Settings, SettingsStatusEnum
+from app.models import Settings, SettingsStatusEnum, CriptographyModeEnum
 from app.schemas import SettingsSchema, SettingsRequest
 from app.service.settings.utils import check_settings_fields
 from app.data_access import (
@@ -17,7 +17,7 @@ from app.data_access import (
     update_settings_query,
     delete_obj_query,
 )
-from app.core.security import key_cryptography_proccess, CriptographyModeEnum
+from app.service.utils import key_cryptography_proccess
 
 
 async def get_settings_status(

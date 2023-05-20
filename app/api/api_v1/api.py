@@ -3,9 +3,9 @@
 from fastapi import APIRouter
 
 # App
-import app.api.routes.root_route as root
-import app.api.routes.settings_route as settings
-import app.api.routes.binance_route as binance
+import app.api.api_v1.routes.root_route as root
+import app.api.api_v1.routes.settings_route as settings
+import app.api.api_v1.routes.binance_route as binance
 
 
 api_router = APIRouter()
