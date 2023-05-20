@@ -10,4 +10,5 @@ conn = connect(
     db=settings.MONGO_DB,
     host=settings.MONGO_HOST,
     port=settings.MONGO_PORT,
+    uuidRepresentation="standard",
 )
