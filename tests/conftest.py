@@ -8,7 +8,6 @@ def pytest_sessionstart() -> None:
     Pytest session start
     """
 
-    url = "https://api.example.com/"
     mock_envs = {
         "DB_TYPE": "mysql+aiomysql",
         "DB_IP": "localhost",
