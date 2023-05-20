@@ -1,4 +1,4 @@
-"""Settings service functions"""
+"""Settings service module"""
 # Built-In
 from datetime import datetime
 from typing import Dict, List, Union, Any

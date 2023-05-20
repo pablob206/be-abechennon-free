@@ -19,5 +19,9 @@ def pytest_sessionstart() -> None:
         "MONGO_HOST": "127.0.0.1",
         "MONGO_PORT": "27017",
         "SECRET_KEY": "a1s2",
+        "KEY_AES_ENCRYPT": "123456789",
+        "BINANCE_API_KEY": "123456789",
+        "BINANCE_API_SECRET": "123456789",
+        "BINANCE_API_URL": "https://api.binance.com/api/v3",
     }
     environ.update(mock_envs)

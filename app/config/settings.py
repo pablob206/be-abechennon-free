@@ -33,6 +33,11 @@ class Settings(BaseSettings):
     MONGO_PORT: int
 
     SECRET_KEY: str
+    KEY_AES_ENCRYPT: str
+
+    BINANCE_API_KEY: str
+    BINANCE_API_SECRET: str
+    BINANCE_API_URL: AnyHttpUrl
 
     class Config:
         """Config class Pydantic"""
