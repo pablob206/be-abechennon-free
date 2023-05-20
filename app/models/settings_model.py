@@ -25,7 +25,7 @@ class SettingsStatusEnum(str, Enum):
     FULL = "full"
 
 
-class Settings(SQLModel, table=True):
+class Settings(SQLModel, table=True):  # type: ignore
     """
     Settings db model
     """
@@ -57,6 +57,8 @@ class Settings(SQLModel, table=True):
     )
 
     class Config:
+        """config"""
+
         arbitrary_types_allowed = True
 
 

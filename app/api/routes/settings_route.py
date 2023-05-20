@@ -79,8 +79,8 @@ async def _add_settings(settings_req: SettingsRequest, db_session: DBSessionDep)
     """
     Add settings
     - **:Request body:** { \n
-            "binance_api_key": (str, Optional) binance api key. I.e: "gak3ojhK3kNHg4UIU11I...",
-            "binance_api_secret": (str, Optional) binance api secret. I.e: "gak3ojhK3kNHg4UIU11I...",
+            "binance_api_key": (str, Optional) binance api key. I.e: "gak3ojhK3...",
+            "binance_api_secret": (str, Optional) binance api secret. I.e: "gak3ojhK3...",
             "pairs_list": (list, Optional) pairs list. I.e: [
                 "adausdt",
                 "ethusdt",
@@ -90,8 +90,8 @@ async def _add_settings(settings_req: SettingsRequest, db_session: DBSessionDep)
         }
     - **:return:** dict, item updated. I.e: \n
             {
-                "binance_api_key": "gak3ojhK3kNHg4UIU11I...",
-                "binance_api_secret": "gak3ojhK3kNHg4UIU11I...",
+                "binance_api_key": "gak3ojhK3...",
+                "binance_api_secret": "gak3ojhK3...",
                 ...
             }
     """
@@ -122,8 +122,8 @@ async def _update_settings(
     Update settings
     - **:param _id:** (int, Default: 1), setting id. I.e: 1
     - **:Request body:** { \n
-            "binance_api_key": (str, Optional) binance api key. I.e: "gak3ojhK3kNHg4UIU11I...",
-            "binance_api_secret": (str, Optional) binance api secret. I.e: "gak3ojhK3kNHg4UIU11I...",
+            "binance_api_key": (str, Optional) binance api key. I.e: "gak3ojhK3...",
+            "binance_api_secret": (str, Optional) binance api secret. I.e: "gak3ojhK3...",
             "pairs_list": (list, Optional) pairs list. I.e: [
                 "adausdt",
                 "ethusdt",
@@ -133,8 +133,8 @@ async def _update_settings(
         }
     - **:return:** dict, item updated. I.e: \n
             {
-                "binance_api_key": "gak3ojhK3kNHg4UIU11I...",
-                "binance_api_secret": "gak3ojhK3kNHg4UIU11I...",
+                "binance_api_key": "gak3ojhK3...",
+                "binance_api_secret": "gak3ojhK3...",
                 ...
             }
     """

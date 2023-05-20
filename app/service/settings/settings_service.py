@@ -45,7 +45,7 @@ async def get_settings(_id: int, db_session: AsyncSession) -> SettingsSchema | N
         raise HTTPException(404, f"Settings id: [{_id}], not found")
 
     return key_cryptography_proccess(
-        settings=SettingsSchema(**settings_db.dict()),
+        settings_obj=SettingsSchema(**settings_db.dict()),
         mode=CriptographyModeEnum.DECRYPT,
     )
 
@@ -58,7 +58,7 @@ async def add_settings(
     """
 
     settings_req = key_cryptography_proccess(
-        settings=settings_req, mode=CriptographyModeEnum.ENCRYPT
+        settings_obj=settings_req, mode=CriptographyModeEnum.ENCRYPT
     )
     return await update_add_obj_query(
         item=Settings(**settings_req.dict()), db_session=db_session
@@ -87,7 +87,7 @@ async def update_settings(
     settings_dto.updated_at = datetime.utcnow()
 
     settings_dto = key_cryptography_proccess(
-        settings=settings_dto, mode=CriptographyModeEnum.ENCRYPT
+        settings_obj=settings_dto, mode=CriptographyModeEnum.ENCRYPT
     )
     return await update_settings_query(
         _id=settings_dto.id,
