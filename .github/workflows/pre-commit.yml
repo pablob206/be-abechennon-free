@@ -1,0 +1,20 @@
+name: Static Tests
+
+on:
+  push:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    name: Static Tests
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Pre-Commit
+        uses: pre-commit/action@v3.0.0

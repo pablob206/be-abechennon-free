@@ -1,0 +1,7 @@
+.git
+*.md
+*.yaml
+tests/*
+github/*
+assets/*
+migrations/*
