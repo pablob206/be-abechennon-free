@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     MONGO_HOST: str
     MONGO_PORT: int
 
+    KEY_AES_ENCRYPT: str
     SECRET_KEY: str
 
     class Config:
