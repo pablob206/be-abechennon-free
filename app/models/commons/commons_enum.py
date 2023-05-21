@@ -3,6 +3,16 @@
 from enum import Enum
 
 
+class SettingsStatusEnum(str, Enum):
+    """
+    Define different settings status enum
+    """
+
+    BASIC = "basic"
+    PARTIAL = "partial"
+    FULL = "full"
+
+
 class ExecTypeEnum(str, Enum):
     """Define different execute-type"""
 

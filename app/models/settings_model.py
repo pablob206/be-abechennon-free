@@ -1,6 +1,5 @@
 """Settings models module"""
 # Built-In
-from enum import Enum
 from datetime import datetime
 
 # Third-Party
@@ -13,16 +12,6 @@ from mongoengine import (
 )
 from sqlalchemy import Column
 from sqlmodel import SQLModel, Field, JSON
-
-
-class SettingsStatusEnum(str, Enum):
-    """
-    Define different settings status enum
-    """
-
-    BASIC = "basic"
-    PARTIAL = "partial"
-    FULL = "full"
 
 
 class Settings(SQLModel, table=True):  # type: ignore
