@@ -3,12 +3,12 @@
 import pytest
 
 # App
-from app.core.cryptography import aes_encrypt, aes_decrypt
+from app.core import aes_cipher
 
 
-class TestCryptography:
+class TestAesCipher:
     """
-    Unit test to cryptography layer
+    Unit test to AES Cipher
     """
 
     @pytest.mark.parametrize(
@@ -33,7 +33,7 @@ class TestCryptography:
         Test aes encrypt
         """
 
-        assert aes_encrypt(text) == expected_result
+        assert aes_cipher.encrypt(text) == expected_result
 
     @pytest.mark.parametrize(
         "ciphertext, expected_result",
@@ -57,4 +57,4 @@ class TestCryptography:
         Test aes decrypt
         """
 
-        assert aes_decrypt(ciphertext) == expected_result
+        assert aes_cipher.decrypt(ciphertext) == expected_result
