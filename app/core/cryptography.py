@@ -1,51 +1,49 @@
 """Cryptography layer module"""
-# Built-In
-from typing import TypeVar
-from binascii import b2a_hex, a2b_hex
-
 # Third-Party
-from pydantic import BaseModel
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
 # App
 from app.config import settings
 
-TypeModel = TypeVar("TypeModel", bound=BaseModel)
 
+class AesCipher:
+    """AES Cipher"""
 
-def aes_encrypt(text: str) -> str:
-    """
-    AES encrypt text
-    """
+    def __init__(self, key_aes: str | None = settings.KEY_AES):
+        """Init"""
+        self.key_aes: bytes = key_aes.encode("utf-8")
+        self._iv = self.key_aes[:16]
+        self.cipher = Cipher(
+            algorithms.AES(self.key_aes), modes.CBC(self._iv), backend=default_backend()
+        )
 
-    key = settings.KEY_AES_ENCRYPT.encode("utf-8")
-    _iv = key[:16]
-    cipher = Cipher(algorithms.AES(key), modes.CBC(_iv), backend=default_backend())
-    encryptor = cipher.encryptor()
+    def encrypt(self, text: str) -> str:
+        """AES encrypt text"""
+        encryptor = self.cipher.encryptor()
+        length = 16
+        count = len(text.encode("utf-8"))
+        if count % length != 0:
+            add = length - (count % length)
+        else:
+            add = 0
+        text = text + ("\0" * add)
+        ciphertext = encryptor.update(text.encode("utf-8")) + encryptor.finalize()
+        return self.to_hex(ciphertext)
 
-    length = 16
-    count = len(text.encode("utf-8"))
-    if count % length != 0:
-        add = length - (count % length)
-    else:
-        add = 0
-    text = text + ("\0" * add)
+    def decrypt(self, text: str) -> str:
+        """AES decrypt text"""
+        decryptor = self.cipher.decryptor()
+        ciphertext = self.from_hex(text)
+        plain_text = decryptor.update(ciphertext) + decryptor.finalize()
+        return plain_text.decode("utf-8").rstrip("\0")
 
-    ciphertext = encryptor.update(text.encode("utf-8")) + encryptor.finalize()
-    return b2a_hex(ciphertext).decode("utf-8")
+    @staticmethod
+    def to_hex(data):
+        """Convert bytes to hex string"""
+        return data.hex()
 
-
-def aes_decrypt(text: str) -> str:
-    """
-    AES decrypt text
-    """
-
-    key = settings.KEY_AES_ENCRYPT.encode("utf-8")
-    _iv = key[:16]
-    cipher = Cipher(algorithms.AES(key), modes.CBC(_iv), backend=default_backend())
-    decryptor = cipher.decryptor()
-
-    ciphertext = a2b_hex(text)
-    plain_text = decryptor.update(ciphertext) + decryptor.finalize()
-    return plain_text.decode("utf-8").rstrip("\0")
+    @staticmethod
+    def from_hex(hex_string):
+        """Convert hex string to bytes"""
+        return bytes.fromhex(hex_string)

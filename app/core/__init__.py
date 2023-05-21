@@ -1,2 +1,7 @@
 """Initialize core layer modules"""
-from .cryptography import aes_decrypt, aes_encrypt
+# App
+from app.config import settings
+from .cryptography import AesCipher
+
+
+aes_cipher = AesCipher(key_aes=settings.KEY_AES)
