@@ -5,13 +5,14 @@ from typing import List
 
 # Third-Party
 from fastapi import HTTPException
-from binance import BinanceSocketManager  # type: ignore[attr-defined]
+from binance import BinanceSocketManager, AsyncClient  # type: ignore[attr-defined]
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
 from app.models import KlineIntervalEnum, MdLogs
 from app.service.binance import binance_client
 from app.service.settings import get_settings_status, get_settings
+from app.config import settings
 
 
 async def build_stream_name(
@@ -43,13 +44,13 @@ async def initialize_ws_binance_client(db_session: AsyncSession, _id: int | None
     """
 
     binance_status = await get_settings_status(_id=_id, db_session=db_session)
-    if "error_fields" in binance_status:
-        raise HTTPException(400, f"Missing field: {binance_status.get('error_fields')}")
-
+    if binance_status["missing_fields"]:
+        raise HTTPException(400, f"Missing field: {binance_status['missing_fields']}")
+    
     binance_settings = await get_settings(_id=_id, db_session=db_session)
 
     kline_stream_list = await build_stream_name(
-        symbol_list=binance_settings.get("pairsList"),
+        symbol_list=binance_settings.pairs_list,
         socket_name="kline",  # optional socket_name="trade"
         interval_list=[
             KlineIntervalEnum.KLINE_INTERVAL_1MINUTE,
@@ -63,17 +64,16 @@ async def initialize_ws_binance_client(db_session: AsyncSession, _id: int | None
         ],
     )
 
-    # client = await AsyncClient.create( # <binance.client.AsyncClient object at 0x7fb9a233f7f0>
+    client = await AsyncClient.create( # <binance.client.AsyncClient object at 0x7fb9a233f7f0>
     # <class 'binance.client.AsyncClient'>
+        api_key=settings.BINANCE_API_KEY,
+        api_secret=settings.BINANCE_API_SECRET,
+        requests_params={"timeout": 20}
 
-    #     api_key=get_settings().BINANCE_API_KEY,
-    #     api_secret=get_settings().BINANCE_API_SECRET,
-    #     requests_params={"timeout": 20}
-    # )
-    client = (
-        binance_client()
-    )  # <binance.client.AsyncClient object at 0x7f3a8824a5f0> <class 'binance.client.AsyncClient'>
-    print(client, type(client))
+    )
+    # client = (
+    #     binance_client.__call__()
+    # )  # <binance.client.AsyncClient object at 0x7f3a8824a5f0> <class 'binance.client.AsyncClient'>
 
     bsm = BinanceSocketManager(client, user_timeout=60)
     m_socket = bsm.multiplex_socket(kline_stream_list)

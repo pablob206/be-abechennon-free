@@ -35,6 +35,3 @@ class BinanceClient:
         if not self.client:
             raise RuntimeError("Binance Client is not started")
         return self.client
-
-
-binance_client = BinanceClient()

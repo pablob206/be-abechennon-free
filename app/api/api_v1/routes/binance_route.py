@@ -18,7 +18,7 @@ async def binance(db_session: DBSessionDep, _id: int | None = 1):
     initialize binance websocket
     """
 
-    return initialize_ws_binance_client(db_session=db_session, _id=_id)
+    return await initialize_ws_binance_client(db_session=db_session, _id=_id)
 
 
 @router.get(path="/binance/balance")
