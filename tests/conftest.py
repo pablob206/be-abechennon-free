@@ -23,5 +23,6 @@ def pytest_sessionstart() -> None:
         "BINANCE_API_KEY": "123456789",
         "BINANCE_API_SECRET": "123456789",
         "BINANCE_API_URL": "https://api.binance.com/api/v3",
+        "BINANCE_SYMBOL_LIST": '["adausdt", "ethusdt", "etcusdt"]',
     }
     environ.update(mock_envs)

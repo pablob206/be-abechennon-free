@@ -7,18 +7,17 @@ from app.service.binance import (
     binance_client,
     init_binance_websocket,
 )
-from app.api import DBSessionDep
 
 router = APIRouter()
 
 
 @router.post(path="/binance/initialize")
-async def binance(db_session: DBSessionDep, _id: int | None = 1):
+async def binance():
     """
     initialize binance websocket
     """
 
-    return await init_binance_websocket(db_session=db_session, _id=_id)
+    return await init_binance_websocket()
 
 
 @router.get(path="/binance/balance")

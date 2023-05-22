@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     BINANCE_API_KEY: str
     BINANCE_API_SECRET: str
     BINANCE_API_URL: AnyHttpUrl
+    BINANCE_SYMBOL_LIST: List[str]
 
     class Config:
         """Config class Pydantic"""

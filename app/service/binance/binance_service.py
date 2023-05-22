@@ -4,13 +4,10 @@ from datetime import datetime
 from typing import List
 
 # Third-Party
-from fastapi import HTTPException
 from binance import BinanceSocketManager, AsyncClient  # type: ignore[attr-defined]
-from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
 from app.models import KlineIntervalEnum, MdLogs
-from app.service.settings import get_settings_status, get_settings
 from app.config import settings
 
 
@@ -37,7 +34,7 @@ async def build_stream_name(
     return stream_name_ls
 
 
-async def init_binance_websocket(db_session: AsyncSession, _id: int | None = 1) -> None:
+async def init_binance_websocket() -> None:
     """
     Initialize websocket from binance client
 
@@ -71,14 +68,8 @@ async def init_binance_websocket(db_session: AsyncSession, _id: int | None = 1) 
     }
     """
 
-    binance_status = await get_settings_status(_id=_id, db_session=db_session)
-    if binance_status["missing_fields"]:
-        raise HTTPException(400, f"Missing field: {binance_status['missing_fields']}")
-
-    binance_settings = await get_settings(_id=_id, db_session=db_session)
-
     kline_stream_list = await build_stream_name(
-        symbol_list=binance_settings.pairs_list,
+        symbol_list=settings.BINANCE_SYMBOL_LIST,
         socket_name="kline",  # optional socket_name="trade"
         interval_list=[
             KlineIntervalEnum.KLINE_INTERVAL_1MINUTE,
@@ -112,7 +103,7 @@ async def init_binance_websocket(db_session: AsyncSession, _id: int | None = 1) 
                 if "k" in ml_data:
                     event_type, event_time, symbol, ticks = ml_data.values()
                     if ticks["x"]:
-                        # print(count, event_type, event_time, symbol, ticks)
+                        # print(event_type, event_time, symbol, ticks)
                         log = MdLogs(
                             eventType=event_type,
                             eventTime=event_time,
