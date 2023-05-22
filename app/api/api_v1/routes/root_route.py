@@ -8,7 +8,7 @@ from fastapi import APIRouter, status
 # App
 from app.config import settings
 from app.service.binance import binance_client
-from app.config import disconnect  # , conn
+from app.config import disconnect
 
 router = APIRouter()
 
@@ -20,7 +20,6 @@ async def startup_event() -> None:
     """
 
     await binance_client.start()
-    # conn() # TypeError: 'MongoClient' object is not callable
     print("Welcome to the jungle! \nStart, Abechennon-Free")
 
 

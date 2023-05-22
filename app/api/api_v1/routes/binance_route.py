@@ -5,7 +5,7 @@ from fastapi import APIRouter
 # App
 from app.service.binance import (
     binance_client,
-    initialize_ws_binance_client,
+    init_binance_websocket,
 )
 from app.api import DBSessionDep
 
@@ -18,7 +18,7 @@ async def binance(db_session: DBSessionDep, _id: int | None = 1):
     initialize binance websocket
     """
 
-    return await initialize_ws_binance_client(db_session=db_session, _id=_id)
+    return await init_binance_websocket(db_session=db_session, _id=_id)
 
 
 @router.get(path="/binance/balance")
