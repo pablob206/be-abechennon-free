@@ -102,11 +102,9 @@ async def init_binance_websocket(db_session: AsyncSession, _id: int | None = 1) 
         ws_client, user_timeout=60
     ).multiplex_socket(kline_stream_list)
 
-    count = 0
     try:
         async with multiplex_socket as multiplex_listener:
             while True:
-                count += 1
                 if not (ml_resp := await multiplex_listener.recv()):
                     continue
 
