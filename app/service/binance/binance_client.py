@@ -2,26 +2,21 @@
 # Third-party
 from binance import AsyncClient  # type: ignore[attr-defined]
 
-# App
-from app.config import settings
-
 
 class BinanceClient:
     """Binance client"""
 
-    client: AsyncClient | None = None
-
     def __init__(self, **kwargs) -> None:
-        self.options = kwargs
-        self.client = None
+        self.options: dict = kwargs
         self.session = None
+        self.client: AsyncClient | None = None
 
     async def start(self) -> None:
         """Start client"""
         if not self.client:
             self.client = await AsyncClient.create(
-                api_key=settings.BINANCE_API_KEY,
-                api_secret=settings.BINANCE_API_SECRET,
+                api_key=self.options.get("binance_api_key"),
+                api_secret=self.options.get("binance_api_secret"),
                 requests_params={"timeout": 20},
             )
 
@@ -35,6 +30,3 @@ class BinanceClient:
         if not self.client:
             raise RuntimeError("Binance Client is not started")
         return self.client
-
-
-binance_client = BinanceClient()
