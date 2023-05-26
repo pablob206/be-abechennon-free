@@ -64,8 +64,9 @@ async def init_binance_websocket_engine(db_session: AsyncSession | None = None) 
     pairs_availables: dict = await get_pairs_availables(
         currency_base=settings_db.currency_base, trading_type=settings_db.trading_type
     )
-    pair_list = [pair for pair in pairs_availables]
-
+    pair_list = [  # pylint: disable=unnecessary-comprehension
+        pair for pair in pairs_availables
+    ]
     kline_stream: list = build_stream_name(
         pair_list=pair_list,
         socket_name=settings.BINANCE_SOCKET_NAME[0],

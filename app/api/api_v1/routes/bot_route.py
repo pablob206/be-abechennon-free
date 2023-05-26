@@ -33,7 +33,8 @@ async def _get_assets_details(
 ):
     """
     Get assets details by wallet
-    - **:param wallet:** WalletTypeEnum (Default WalletTypeEnum.MARGIN), wallet type. I.e: WalletTypeEnum.MARGIN
+    - **:param wallet:** WalletTypeEnum (Default WalletTypeEnum.MARGIN),
+    wallet type. I.e: WalletTypeEnum.MARGIN
     - **:return:** dict. Detail margin account. I.e: \n
             {
                 "IOTAUSDT": {
@@ -69,9 +70,11 @@ async def _get_pairs_availables(
     trading_type: TradingTypeEnum = TradingTypeEnum.MARGIN,
 ):
     """
-    Get pairs availables by currency-base and trading-type, format: 'pair'-'currency'. Current length: 232.
+    Get pairs availables by currency-base and trading-type, format: 'pair'-'currency'.
+    Current length: 232.
     - **:param currency_base:** str (Default USDT), currency base. I.e: "USDT"
-    - **:param trading_type:** TradingTypeEnum (Default TradingTypeEnum.MARGIN), trading type. I.e: TradingTypeEnum.MARGIN
+    - **:param trading_type:** TradingTypeEnum (Default TradingTypeEnum.MARGIN),
+    trading type. I.e: TradingTypeEnum.MARGIN
     - **:return**: dict, pairs availables. I.e: \n
             {
                 "XMRUSDT": "XMR",
