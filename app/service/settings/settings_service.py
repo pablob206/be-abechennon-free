@@ -21,14 +21,14 @@ from app.service.utils import key_cryptography_proccess
 
 
 async def get_settings_status(
-    db_session: AsyncSession, _id: int | None = None
+    db_session: AsyncSession | None = None, _id: int | None = None
 ) -> Dict[str, Union[str, List[str]]]:
     """
     Get settings status
     """
 
     if not (settings := await get_settings_query(_id=_id, db_session=db_session)):
-        raise HTTPException(404, f"Settings id: [{_id}], not found")
+        return {"status": SettingsStatusEnum.BASIC}
 
     status = SettingsStatusEnum.PARTIAL
     if not (missing_fields := check_settings_fields(settings=settings)):

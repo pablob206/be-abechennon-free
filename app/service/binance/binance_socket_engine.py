@@ -8,7 +8,13 @@ from binance import BinanceSocketManager  # type: ignore
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
-from app.models import MdLogs, SocketTypeEnum, Settings, AppStatusEnum
+from app.models import (
+    MdLogs,
+    SocketTypeEnum,
+    Settings,
+    AppStatusEnum,
+    SettingsStatusEnum,
+)
 from app.config import settings
 from app.service.binance.binance_service import (
     build_stream_name,
@@ -17,10 +23,13 @@ from app.service.binance.binance_service import (
     update_klines_cache,
     binance_client,
 )
+from app.service.settings import get_settings_status
 from app.data_access import clear_cache, get_settings_query
 
 
-async def init_binance_websocket_engine(db_session: AsyncSession | None = None) -> None:
+async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
+    db_session: AsyncSession | None = None,
+) -> None:
     """
     Initialize binance websocket
 
@@ -53,10 +62,14 @@ async def init_binance_websocket_engine(db_session: AsyncSession | None = None) 
     }
     """
 
-    if settings.APP_STATUS != AppStatusEnum.RUNNING:
+    settings_status = await get_settings_status()
+    if (
+        settings.APP_STATUS != AppStatusEnum.RUNNING
+        or settings_status["status"] != SettingsStatusEnum.FULL
+    ):
         return
 
-    clear_cache()
+    await clear_cache()
 
     await asyncio.sleep(2)
     settings_db: Settings = await get_settings_query(db_session=db_session)
@@ -78,12 +91,10 @@ async def init_binance_websocket_engine(db_session: AsyncSession | None = None) 
     ).multiplex_socket(streams=kline_stream)
 
     for interval in settings.BINANCE_SOCKET_INTERVAL:
-        asyncio.ensure_future(
-            set_klines(
-                pair_list=pair_list,
-                interval=interval,
-                limit=settings.BINANCE_CACHE_LIMIT,
-            )
+        await set_klines(
+            pair_list=pair_list,
+            interval=interval,
+            limit=settings.BINANCE_CACHE_LIMIT,
         )
 
     try:

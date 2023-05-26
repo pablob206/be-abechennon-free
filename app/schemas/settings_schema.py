@@ -6,7 +6,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 # App
-from app.models import BotStatusEnum
+from app.models import BotStatusEnum, TradingTypeEnum, OrdTypeEnum
 
 
 class SettingsBase(BaseModel):
@@ -15,7 +15,8 @@ class SettingsBase(BaseModel):
     binance_api_key: str = Field(None, title="Binance API Key")
     binance_api_secret: str = Field(None, title="Binance API Secret")
     pairs: list = Field(None, title="Pairs")
-    order_type: str = Field(None, title="Order Type")
+    trading_type: TradingTypeEnum = Field(None, title="Trading Type")
+    order_type: OrdTypeEnum = Field(None, title="Order Type")
     max_open_position: int = Field(None, title="Max Open Position")
     max_open_position_per_coin: int = Field(None, title="Max Open Position Per Coin")
     currency_base: str = Field(None, title="Currency Base")
@@ -69,7 +70,8 @@ class SettingsRequest(SettingsBase):
                     "ALGOUSDT",
                     "1INCHUSDT",
                 ],
-                "order_type": None,
+                "trading_type": "MARGIN",
+                "order_type": "MARKET",
                 "max_open_position": 20,
                 "max_open_position_per_coin": 3,
                 "currency_base": "USDT",
