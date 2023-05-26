@@ -5,14 +5,18 @@ from datetime import datetime
 # Third-Party
 from pydantic import BaseModel, Field
 
+# App
+from app.models import BotStatusEnum, TradingTypeEnum, OrdTypeEnum
+
 
 class SettingsBase(BaseModel):
     """Settings base"""
 
     binance_api_key: str = Field(None, title="Binance API Key")
     binance_api_secret: str = Field(None, title="Binance API Secret")
-    pairs_list: list = Field(None, title="Pairs List")
-    order_type: str = Field(None, title="Order Type")
+    pairs: list = Field(None, title="Pairs")
+    trading_type: TradingTypeEnum = Field(None, title="Trading Type")
+    order_type: OrdTypeEnum = Field(None, title="Order Type")
     max_open_position: int = Field(None, title="Max Open Position")
     max_open_position_per_coin: int = Field(None, title="Max Open Position Per Coin")
     currency_base: str = Field(None, title="Currency Base")
@@ -29,6 +33,7 @@ class SettingsBase(BaseModel):
     invert_signal: bool = Field(None, title="Invert Signal")
     flag_on_magic: bool = Field(None, title="Flag On Magic")
     magic_amount: float = Field(None, title="Magic Amount")
+    bot_status: BotStatusEnum = Field(None, title="Bot Status")
     created_at: datetime = Field(None, title="Created At")
     updated_at: datetime = Field(None, title="Updated At")
 
@@ -53,19 +58,20 @@ class SettingsRequest(SettingsBase):
             "example": {
                 "binance_api_key": "gak3ojhK3kNHg4UIU11I",
                 "binance_api_secret": "gak3ojhK3kNHg4UIU11I",
-                "pairs_list": [
-                    "adausdt",
-                    "ethusdt",
-                    "etcusdt",
-                    "btcusdt",
-                    "bnbusdt",
-                    "iotausdt",
-                    "xlmusdt",
-                    "xrpusdt",
-                    "ltcusdt",
-                    "solusdt",
+                "pairs": [
+                    "XLMUSDT",
+                    "NEOUSDT",
+                    "UNIUSDT",
+                    "CRVUSDT",
+                    "COMPUSDT",
+                    "DOTUSDT",
+                    "IOTAUSDT",
+                    "THETAUSDT",
+                    "ALGOUSDT",
+                    "1INCHUSDT",
                 ],
-                "order_type": None,
+                "trading_type": "MARGIN",
+                "order_type": "MARKET",
                 "max_open_position": 20,
                 "max_open_position_per_coin": 3,
                 "currency_base": "USDT",
@@ -82,5 +88,6 @@ class SettingsRequest(SettingsBase):
                 "invert_signal": False,
                 "flag_on_magic": False,
                 "magic_amount": 100.0,
+                "bot_status": "RUNNING",
             }
         }

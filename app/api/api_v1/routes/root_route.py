@@ -6,9 +6,8 @@ from typing import Dict
 from fastapi import APIRouter, status
 
 # App
-from app.config import settings
+from app.config import settings, disconnect
 from app.service.binance import binance_client
-from app.config import disconnect
 
 router = APIRouter()
 
@@ -19,7 +18,6 @@ async def startup_event() -> None:
     On startup
     """
 
-    await binance_client.start()
     print("Welcome to the jungle! \nStart, Abechennon-Free")
 
 

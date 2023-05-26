@@ -21,14 +21,14 @@ from app.service.utils import key_cryptography_proccess
 
 
 async def get_settings_status(
-    _id: int, db_session: AsyncSession
+    db_session: AsyncSession | None = None, _id: int | None = None
 ) -> Dict[str, Union[str, List[str]]]:
     """
     Get settings status
     """
 
     if not (settings := await get_settings_query(_id=_id, db_session=db_session)):
-        raise HTTPException(404, f"Settings id: [{_id}], not found")
+        return {"status": SettingsStatusEnum.BASIC}
 
     status = SettingsStatusEnum.PARTIAL
     if not (missing_fields := check_settings_fields(settings=settings)):
@@ -36,7 +36,9 @@ async def get_settings_status(
     return {"status": status, "missing_fields": missing_fields}
 
 
-async def get_settings(_id: int, db_session: AsyncSession) -> SettingsSchema | None:
+async def get_settings(
+    db_session: AsyncSession, _id: int | None = None
+) -> SettingsSchema | None:
     """
     Get settings
     """
@@ -48,6 +50,17 @@ async def get_settings(_id: int, db_session: AsyncSession) -> SettingsSchema | N
         settings_obj=SettingsSchema(**settings_db.dict()),
         mode=CriptographyModeEnum.DECRYPT,
     )
+
+
+async def get_bot_status(db_session: AsyncSession) -> Dict[str, str]:
+    """
+    Get bot status
+    """
+
+    if not (settings_db := await get_settings_query(db_session=db_session)):
+        raise HTTPException(404, "Settings not found")
+
+    return {"status": settings_db.bot_status}
 
 
 async def add_settings(
@@ -66,9 +79,9 @@ async def add_settings(
 
 
 async def update_settings(
-    _id: int,
     settings_req: SettingsRequest,
     db_session: AsyncSession,
+    _id: int | None = None,
 ) -> Settings:
     """
     Update settings

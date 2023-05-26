@@ -6,5 +6,6 @@ from .settings_service import (
     add_settings,
     update_settings,
     delete_settings,
+    get_bot_status,
 )
 from .utils import check_settings_fields

@@ -6,9 +6,9 @@ from mongoengine import connect, disconnect  # pylint: disable=unused-import
 from app.config import settings
 
 
-conn = connect(
-    db=settings.MONGO_DB,
-    host=settings.MONGO_HOST,
-    port=settings.MONGO_PORT,
+mongo_client = connect(
+    db=settings.DB_MONGO,
+    host=settings.HOST_MONGO,
+    port=settings.PORT_MONGO,
     uuidRepresentation="standard",
 )

@@ -25,10 +25,10 @@ router = APIRouter()
     response_model=Dict[str, Union[str, List[str]]],
     status_code=status.HTTP_200_OK,
 )
-async def _get_settings_status(db_session: DBSessionDep, _id: int | None = 1):
+async def _get_settings_status(db_session: DBSessionDep, _id: int | None = None):
     """
     Get settings status
-    - **:param _id:** (int, Default: 1), setting id. I.e: 1
+    - **:param _id:** (int, Default: None), setting id. I.e: 1
     - **:return:** dict, settings status and missing fields. I.e: \n
             {
                 "status": "partial",
@@ -45,13 +45,12 @@ async def _get_settings_status(db_session: DBSessionDep, _id: int | None = 1):
     path="/settings",
     summary="Get settings",
     response_model=SettingsSchema,
-    response_model_exclude=["id"],
     status_code=status.HTTP_200_OK,
 )
-async def _get_settings(db_session: DBSessionDep, _id: int | None = 1):
+async def _get_settings(db_session: DBSessionDep, _id: int | None = None):
     """
     Get settings
-    - **:param _id:** (int, Default: 1), setting id. I.e: 1
+    - **:param _id:** (int, Default: None), setting id. I.e: 1
     - **:return:** dict, settings. I.e: \n
             {
                 "binance_api_key": "gak3ojhK3kNHg4UIU11I...",
@@ -116,11 +115,11 @@ async def _add_settings(settings_req: SettingsRequest, db_session: DBSessionDep)
 async def _update_settings(
     settings_req: SettingsRequest,
     db_session: DBSessionDep,
-    _id: int | None = 1,
+    _id: int | None = None,
 ):
     """
     Update settings
-    - **:param _id:** (int, Default: 1), setting id. I.e: 1
+    - **:param _id:** (int, Default: None), setting id. I.e: 1
     - **:Request body:** { \n
             "binance_api_key": (str, Optional) binance api key. I.e: "gak3ojhK3...",
             "binance_api_secret": (str, Optional) binance api secret. I.e: "gak3ojhK3...",

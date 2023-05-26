@@ -8,9 +8,66 @@ class SettingsStatusEnum(str, Enum):
     Define different settings status enum
     """
 
-    BASIC = "basic"
-    PARTIAL = "partial"
-    FULL = "full"
+    BASIC = "BASIC"
+    PARTIAL = "PARTIAL"
+    FULL = "FULL"
+
+
+class BotStatusEnum(str, Enum):
+    """
+    Define different bot status enum
+    """
+
+    RUNNING = "RUNNING"
+    STOPPED = "STOPPED"
+    MAINTANANCE = "MAINTANANCE"
+    TESTING = "TESTING"
+
+
+class AppStatusEnum(str, Enum):
+    """
+    Define different app status enum
+    """
+
+    RUNNING = "RUNNING"
+    STOPPED = "STOPPED"
+    MAINTANANCE = "MAINTANANCE"
+    TESTING = "TESTING"
+
+
+class SocketTypeEnum(str, Enum):
+    """Define different websocket type"""
+
+    KLINE = "kline"
+    TRADE = "trade"
+    AGGTRADE = "aggTrade"
+    DEPTH = "depth"
+    TICKER = "ticker"
+
+
+class TradingTypeEnum(str, Enum):
+    """Define diferent trading type"""
+
+    SPOT = "SPOT"
+    MARGIN = "MARGIN"
+    FUTURES = "FUTURES"
+    P2P = "P2P"
+
+
+class WalletTypeEnum(str, Enum):
+    """Define different wallet type"""
+
+    SPOT = "spot"
+    MARGIN = "margin"
+    FUTURES = "futures"
+    OPTIONS = "options"
+    FUNDING = "funding"
+
+
+class CurrencyBaseEnum(str, Enum):
+    """Define different currency base"""
+
+    USDT = "USDT"
 
 
 class ExecTypeEnum(str, Enum):
@@ -33,12 +90,6 @@ class ExecTypeEnum(str, Enum):
     TRADE_CORRECT = "TRADE_CORRECT"  # G
     TRADE_CANCEL = "TRADE_CANCEL"  # H
     ORDER_STATUS = "ORDER_STATUS"  # I
-
-
-class SymbolTypeEnum(str, Enum):
-    """Define diferent symbol type"""
-
-    SYMBOL_TYPE_SPOT = "SPOT"
 
 
 class OrdStatusEnum(str, Enum):
@@ -83,13 +134,13 @@ class SideEnum(str, Enum):
 class OrdTypeEnum(str, Enum):
     """Define different order type"""
 
-    ORDER_TYPE_LIMIT = "LIMIT"
-    ORDER_TYPE_MARKET = "MARKET"
-    ORDER_TYPE_STOP_LOSS = "STOP_LOSS"
-    ORDER_TYPE_STOP_LOSS_LIMIT = "STOP_LOSS_LIMIT"
-    ORDER_TYPE_TAKE_PROFIT = "TAKE_PROFIT"
-    ORDER_TYPE_TAKE_PROFIT_LIMIT = "TAKE_PROFIT_LIMIT"
-    ORDER_TYPE_LIMIT_MAKER = "LIMIT_MAKER"
+    LIMIT = "LIMIT"
+    MARKET = "MARKET"
+    STOP_LOSS = "STOP_LOSS"
+    STOP_LOSS_LIMIT = "STOP_LOSS_LIMIT"
+    TAKE_PROFIT = "TAKE_PROFIT"
+    TAKE_PROFIT_LIMIT = "TAKE_PROFIT_LIMIT"
+    LIMIT_MAKER = "LIMIT_MAKER"
 
 
 class TimeInForceEnum(str, Enum):

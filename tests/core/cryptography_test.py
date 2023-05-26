@@ -1,4 +1,4 @@
-"""Cryptography layer module"""
+"""Cryptography test layer module"""
 # Third-Party
 import pytest
 

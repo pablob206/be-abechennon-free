@@ -14,15 +14,15 @@ from app.config import settings
 
 
 sql_url = (
-    settings.DB_TYPE
+    settings.TYPE_MYSQL
     + "://"
-    + settings.DB_USER
+    + settings.USER_MYSQL
     + ":"
-    + settings.DB_PASSWORD
+    + settings.PASSWORD_MYSQL
     + "@"
-    + settings.DB_IP
+    + settings.HOST_MYSQL
     + "/"
-    + settings.DB_NAME
+    + settings.DB_MYSQL
 )
 
 async_session = sessionmaker(
