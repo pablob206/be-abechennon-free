@@ -4,6 +4,7 @@ from typing import List
 
 # Third-Party
 from pydantic import BaseSettings, AnyHttpUrl
+from app.models import AppStatusEnum
 
 
 class Settings(BaseSettings):
@@ -21,24 +22,36 @@ class Settings(BaseSettings):
         "http://localhost:5173",
     ]
 
-    DB_TYPE: str = "mysql+aiomysql"
-    DB_IP: str = "localhost"
-    DB_USER: str = "root"
-    DB_PASSWORD: str | None
-    DB_NAME: str = "abechennon-free"
-    PORT: int = 3306
+    APP_STATUS: str = AppStatusEnum.RUNNING
 
-    MONGO_DB: str
-    MONGO_HOST: str
-    MONGO_PORT: int
+    TYPE_MYSQL: str = "mysql+aiomysql"
+    DB_MYSQL: str = "abechennon-free"
+    HOST_MYSQL: str = "localhost"
+    PORT_MYSQL: int = 3306
+    USER_MYSQL: str = "root"
+    PASSWORD_MYSQL: str | None
+
+    DB_MONGO: str
+    HOST_MONGO: str
+    PORT_MONGO: int = 27017
+    USER_MONGO: str | None
+    PASSWORD_MONGO: str | None
+
+    DB_REDIS: str
+    HOST_REDIS: str
+    PORT_REDIS: int = 6379
+    USER_REDIS: str | None
+    PASSWORD_REDIS: str | None
 
     SECRET_KEY: str
     KEY_AES: str
 
     BINANCE_API_KEY: str
     BINANCE_API_SECRET: str
-    BINANCE_API_URL: AnyHttpUrl
-    BINANCE_SYMBOL_LIST: List[str]
+    BINANCE_REQUEST_TIMEOUT: int = 20
+    BINANCE_SOCKET_NAME: list = ["kline"]
+    BINANCE_SOCKET_INTERVAL: list = ["1m", "5m", "15m"]
+    BINANCE_CACHE_LIMIT: int = 500
 
     class Config:
         """Config class Pydantic"""

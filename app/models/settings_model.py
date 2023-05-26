@@ -22,7 +22,8 @@ class Settings(SQLModel, table=True):  # type: ignore
     id: int = Field(primary_key=True, nullable=False)
     binance_api_key: str | None = None
     binance_api_secret: str | None = None
-    pairs_list: list = Field(sa_column=Column(JSON))
+    pairs: list = Field(sa_column=Column(JSON))
+    trading_type: str | None = None
     order_type: str | None = None
     max_open_position: int | None = None
     max_open_position_per_coin: int | None = None
@@ -40,6 +41,7 @@ class Settings(SQLModel, table=True):  # type: ignore
     invert_signal: bool | None = None
     flag_on_magic: bool | None = None
     magic_amount: float | None = None
+    bot_status: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(
         default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}
@@ -59,7 +61,7 @@ class MdLogs(DynamicDocument):
     intervalKline = StringField(required=False)
     dateAt = DateTimeField(required=False)
     symbol = StringField(max_length=200, required=True)
-    ticks = DictField(required=False)
+    tick = DictField(required=False)
 
     class Config:
         """config"""

@@ -13,3 +13,4 @@ alembic~=1.11.1
 python-binance==1.0.17
 websockets==11.0.3
 cryptography~=40.0.2
+redis~=4.5.5
