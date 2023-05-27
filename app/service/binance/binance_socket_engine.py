@@ -28,6 +28,7 @@ from app.data_access import clear_cache, get_settings_query
 
 
 async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
+    with_cache_cleaning: bool | None = False,
     db_session: AsyncSession | None = None,
 ) -> None:
     """
@@ -62,16 +63,26 @@ async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
     }
     """
 
-    settings_status = await get_settings_status()
-    if (
-        settings.APP_STATUS != AppStatusEnum.RUNNING
-        or settings_status["status"] != SettingsStatusEnum.FULL
-    ):
-        return
+    await asyncio.sleep(5)
 
-    await clear_cache()
+    market_data_start = False
+    while market_data_start is False:
+        market_data_status = (
+            await binance_client().get_system_status()
+        )  # {'status': 0, 'msg': 'normal'}
+        settings_status = await get_settings_status()
+        if (
+            settings.APP_STATUS != AppStatusEnum.RUNNING
+            or settings_status["status"] != SettingsStatusEnum.FULL
+            or market_data_status["status"] != 0
+        ):
+            await asyncio.sleep(5)
+            continue
+        market_data_start = True
 
-    await asyncio.sleep(2)
+    if with_cache_cleaning:
+        clear_cache()
+
     settings_db: Settings = await get_settings_query(db_session=db_session)
 
     pairs_availables: dict = await get_pairs_availables(
@@ -90,22 +101,30 @@ async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
         client=binance_client(), user_timeout=60
     ).multiplex_socket(streams=kline_stream)
 
-    for interval in settings.BINANCE_SOCKET_INTERVAL:
-        await set_klines(
-            pair_list=pair_list,
-            interval=interval,
-            limit=settings.BINANCE_CACHE_LIMIT,
-        )
-
+    if with_cache_cleaning:
+        for interval in settings.BINANCE_SOCKET_INTERVAL:
+            await set_klines(
+                pair_list=pair_list,
+                interval=interval,
+                limit=settings.BINANCE_CACHE_LIMIT,
+            )
     try:
         async with multiplex_socket as multiplex_listener:
             while True:
                 if not (ml_resp := await multiplex_listener.recv()):
                     continue
-                ml_data = ml_resp["data"]
+                if (
+                    ml_resp.get("e") == "error"
+                ):  # {'e': 'error', 'm': 'Queue overflow. Message not filled'}
+                    await binance_client().close_connection()
+                    await init_binance_websocket_engine(
+                        db_session=db_session, with_cache_cleaning=False
+                    )
+                if not (ml_data := ml_resp.get("data")):
+                    continue
                 if "k" in ml_data:
                     event_type, event_time, symbol, tick = ml_data.values()
-                    await update_klines_cache(pair=symbol, tick=tick)
+                    update_klines_cache(pair=symbol, tick=tick)
                     if tick["x"]:
                         log = MdLogs(
                             eventType=event_type,
