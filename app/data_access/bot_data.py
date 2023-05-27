@@ -6,15 +6,15 @@ from typing import Dict
 from app.config import redis_client
 
 
-async def clear_cache() -> None:
+def clear_cache() -> None:
     """
     Clear cache
     """
 
-    await redis_client.flushdb()
+    redis_client.flushdb()
 
 
-async def set_klines_cache(
+def set_klines_cache(
     name: str,
     mapping: Dict[bytes, bytes],
 ) -> None:
@@ -22,10 +22,10 @@ async def set_klines_cache(
     Set klines cache
     """
 
-    return await redis_client.hmset(name=name, mapping=mapping)
+    return redis_client.hmset(name=name, mapping=mapping)
 
 
-async def get_klines_cache(
+def get_klines_cache(
     name: str,
 ) -> Dict[bytes, bytes]:
     """
@@ -39,4 +39,4 @@ async def get_klines_cache(
     }
     """
 
-    return await redis_client.hgetall(name=name)
+    return redis_client.hgetall(name=name)

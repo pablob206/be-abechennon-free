@@ -161,13 +161,13 @@ async def set_klines(
             temp_dict["v"].append(float(historical_klines[5]))
 
         temp_dict_bytes = {key: orjson.dumps(value) for key, value in temp_dict.items()}
-        await set_klines_cache(name=f"{pair}_{interval}", mapping=temp_dict_bytes)
+        set_klines_cache(name=f"{pair}_{interval}", mapping=temp_dict_bytes)
         klines_proccessed_dict[f"{pair}_{interval}"] = temp_dict
 
     return klines_proccessed_dict
 
 
-async def update_klines_cache(pair: str, tick: dict) -> None:
+def update_klines_cache(pair: str, tick: dict) -> None:
     """
     Update klines to cache
     :param pair: str, pair. I.e: "ADAUSDT"
@@ -193,7 +193,7 @@ async def update_klines_cache(pair: str, tick: dict) -> None:
     """
 
     interval = tick["i"]
-    if not (tick_cache_bytes := await get_klines_cache(name=f"{pair}_{interval}")):
+    if not (tick_cache_bytes := get_klines_cache(name=f"{pair}_{interval}")):
         return
     tick_cache = {}
     for key, value in tick_cache_bytes.items():
@@ -209,4 +209,4 @@ async def update_klines_cache(pair: str, tick: dict) -> None:
     temp_dict_bytes: dict = {
         key: orjson.dumps(value) for key, value in tick_cache.items()
     }
-    return await set_klines_cache(name=f"{pair}_{interval}", mapping=temp_dict_bytes)
+    return set_klines_cache(name=f"{pair}_{interval}", mapping=temp_dict_bytes)

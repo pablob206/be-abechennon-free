@@ -18,6 +18,7 @@ async def startup_event() -> None:
     On startup
     """
 
+    await binance_client.start()
     print("Welcome to the jungle! \nStart, Abechennon-Free")
 
 

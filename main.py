@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # App
 from app.config import settings
 from app.api import api_router
-from app.service.binance import init_binance_websocket_engine, binance_client
+from app.service.binance import init_binance_websocket_engine
 
 
 app = FastAPI(
@@ -32,5 +32,4 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
 if __name__ == "main":
-    asyncio.ensure_future(binance_client.start())
-    asyncio.ensure_future(init_binance_websocket_engine())
+    asyncio.ensure_future(init_binance_websocket_engine(with_cache_cleaning=True))
