@@ -34,11 +34,11 @@ async def get_strategy(_id: str | None = None):
 
     try:
         doc = await get_document(_id=_id, document=Strategies)
-    except DoesNotExist:
+    except DoesNotExist as exc:
         raise HTTPException(
             status_code=404,
-            detail="Strategy not found",
-        )
+            detail=f"Strategy not found [{exc}]",
+        ) from exc
     return {
         item: str(getattr(doc, item)) if item == "id" else getattr(doc, item)
         for item in doc._fields
@@ -53,11 +53,11 @@ async def get_all_strategy():
 
     try:
         strategy_list = await get_all_document(document=Strategies)
-    except DoesNotExist:
+    except DoesNotExist as exc:
         raise HTTPException(
             status_code=404,
-            detail="Strategy not found",
-        )
+            detail=f"Strategy not found [{exc}]",
+        ) from exc
     all_document = []
     for doc in strategy_list:
         doc_data = {
@@ -76,11 +76,11 @@ async def update_strategy(_id: int, strategy_req: StrategyRequest):
 
     try:
         strategy_doc = await get_document(_id=_id, document=Strategies)
-    except DoesNotExist:
+    except DoesNotExist as exc:
         raise HTTPException(
             status_code=404,
-            detail="Strategy not found",
-        )
+            detail=f"Strategy not found [{exc}]",
+        ) from exc
 
     strategy_req_dict = strategy_req.dict(exclude_unset=True)
     for key, value in strategy_req_dict.items():
@@ -96,9 +96,9 @@ async def delete_strategy(_id: str):
 
     try:
         await get_document(_id=_id, document=Strategies)
-    except DoesNotExist:
+    except DoesNotExist as exc:
         raise HTTPException(
             status_code=404,
-            detail="Strategy not found",
-        )
+            detail=f"Strategy not found [{exc}]",
+        ) from exc
     return await delete_document(document=Strategies, _id=_id)
