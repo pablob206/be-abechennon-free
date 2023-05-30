@@ -1,0 +1,335 @@
+# PyLint
+[tool.pylint.main]
+# A comma-separated list of package or module names from where C extensions may
+# be loaded. Extensions are loading into the active Python interpreter and may
+# run arbitrary code. (This is an alternative name to extension-pkg-allow-list
+# for backward compatibility.)
+# extension-pkg-whitelist =
+
+# Specify a score threshold to be exceeded before program exits with error.
+fail-under = 10
+
+# Python code to execute, usually for sys.path manipulation such as
+# pygtk.require().
+# init-hook="import sys; sys.path.append('.')"
+
+# Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
+# number of processors available to use, and will cap the count on Windows to
+# avoid hangs.
+jobs = 0
+
+# When enabled, pylint would attempt to guess common misconfiguration and emit
+# user-friendly hints instead of false-positive error messages.
+suggestion-mode = true
+
+[tool.pylint.basic]
+
+# Bad variable names which should always be refused, separated by a comma.
+bad-names = ["foo", "bar", "baz", "toto", "tutu", "tata"]
+
+# Bad variable names regexes, separated by a comma. If names match any regex,
+# they will always be refused
+# bad-names-rgxs =
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names = ["i", "j", "k", "ex", "Run", "_"]
+
+# Good variable names regexes, separated by a comma. If names match any regex,
+# they will always be accepted
+# good-names-rgxs =
+
+# Regular expression which should only match function or class names that do not
+# require a docstring.
+no-docstring-rgx = "^_"
+
+[tool.pylint.design]
+# List of regular expressions of class ancestor names to ignore when counting
+# public methods (see R0903)
+# exclude-too-few-public-methods = true
+
+# List of qualified class names to ignore when counting class parents (see R0901)
+# ignored-parents =
+
+# Maximum number of arguments for function / method.
+max-args = 5
+
+# Maximum number of attributes for a class (see R0902).
+max-attributes = 7
+
+# Maximum number of boolean expressions in an if statement (see R0916).
+max-bool-expr = 5
+
+# Maximum number of branch for function / method body.
+max-branches = 12
+
+# Maximum number of locals for function / method body.
+max-locals = 15
+
+# Maximum number of parents for a class (see R0901).
+max-parents = 7
+
+# Maximum number of public methods for a class (see R0904).
+max-public-methods = 20
+
+# Maximum number of return / yield for function / method body.
+max-returns = 6
+
+# Maximum number of statements in function / method body.
+max-statements = 50
+
+# Minimum number of public methods for a class (see R0903).
+min-public-methods = 0
+
+[tool.pylint.exceptions]
+# Exceptions that will emit a warning when caught.
+overgeneral-exceptions = ["BaseException", "Exception"]
+
+[tool.pylint.format]
+# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
+expected-line-ending-format = "LF"
+
+# Regexp for a line that is allowed to be longer than the limit.
+ignore-long-lines = "^\\s*(# )?<?https?://\\S+>?$"
+
+# Number of spaces of indent required inside a hanging or continued line.
+indent-after-paren = 4
+
+# String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1
+# tab).
+indent-string = "    "
+
+# Maximum number of characters on a single line.
+max-line-length = 100
+
+# Maximum number of lines in a module.
+max-module-lines = 1000
+
+# Allow the body of a class to be on the same line as the declaration if body
+# contains single statement.
+single-line-class-stmt = false
+
+# Allow the body of an if to be on the same line as the test if there is no else.
+single-line-if-stmt = false
+
+[tool.pylint.imports]
+# List of modules that can be imported at any level, not just the top level one.
+# allow-any-import-level =
+
+# Allow wildcard imports from modules that define __all__.
+allow-wildcard-with-all = false
+
+# Deprecated modules which should not be used, separated by a comma.
+# deprecated-modules =
+
+# Force import order to recognize a module as part of the standard compatibility
+# libraries.
+# known-standard-library =
+
+# Force import order to recognize a module as part of a third party library.
+known-third-party = ["enchant"]
+
+# Couples of modules and preferred modules, separated by a comma.
+# preferred-modules =
+
+[tool.pylint.logging]
+# The type of string formatting that logging methods do. `old` means using %
+# formatting, `new` is for `{}` formatting.
+logging-format-style = "new"
+
+# Logging modules to check that the string format arguments are in logging
+# function parameter format.
+logging-modules = ["logging"]
+
+[tool.pylint."messages control"]
+# Disable the message, report, category or checker with the given id(s). You can
+# either give multiple identifiers separated by comma (,) or put this option
+# multiple times (only on the command line, not in the configuration file where
+# it should appear only once). You can also use "--disable=all" to disable
+# everything first and then re-enable specific checks. For example, if you want
+# to run only the similarities checker, you can use "--disable=all
+# --enable=similarities". If you want to run only the classes checker, but have
+# no Warning level messages displayed, use "--disable=all --enable=classes
+# --disable=W".
+disable = ["import-error", "duplicate-code", "inconsistent-return-statements", "no-name-in-module"]
+
+
+[tool.pylint.miscellaneous]
+# List of note tags to take in consideration, separated by a comma.
+notes = ["FIXME", "XXX", "TODO"]
+
+# Regular expression of note tags to take in consideration.
+# notes-rgx =
+
+[tool.pylint.refactoring]
+# Maximum number of nested blocks for function / method body
+max-nested-blocks = 5
+
+[tool.pylint.reports]
+# Template used to display messages. This is a python new-style format string
+# used to format the message information. See doc for all details.
+# msg-template = "[ {msg_id} ]( {module}.{obj} ) {line:03d}: {msg}"
+
+# Set the output format. Available formats are text, parseable, colorized, json
+# and msvs (visual studio). You can also give a reporter class, e.g.
+# mypackage.mymodule.MyReporterClass.
+output-format = "text"
+
+# Tells whether to display a full report or only the messages.
+reports = false
+
+# Activate the evaluation score.
+score = true
+
+[tool.pylint.similarities]
+# Comments are removed from the similarity computation
+ignore-comments = true
+
+# Docstrings are removed from the similarity computation
+ignore-docstrings = true
+
+# Imports are removed from the similarity computation
+ignore-imports = true
+
+# Signatures are removed from the similarity computation
+ignore-signatures = true
+
+# Minimum lines number of a similarity.
+min-similarity-lines = 4
+
+[tool.pylint.string]
+# This flag controls whether inconsistent-quotes generates a warning when the
+# character used as a quote delimiter is used inconsistently within a module.
+check-quote-consistency = true
+
+# This flag controls whether the implicit-str-concat should generate a warning on
+# implicit string concatenation in sequences defined over several lines.
+check-str-concat-over-line-jumps = true
+
+
+# Bandit
+[tool.bandit]
+# Find and process files in subdirectories
+recursive=true
+
+# Dirs to exclude from analysis
+exclude_dirs = ["tests"]
+
+# List of test IDs to skip
+# https://bandit.readthedocs.io/en/latest/config.html#skipping-tests
+# https://bandit.readthedocs.io/en/latest/plugins/index.html#complete-test-plugin-listing
+skips=[]
+
+# Specify output format {csv,custom,html,json,screen,txt,xml,yaml}
+# https://bandit.readthedocs.io/en/latest/formatters/index.html#complete-formatter-listing
+format="txt"
+
+
+[tool.mypy]
+# MyPy config file
+# File reference here - http://mypy.readthedocs.io/en/latest/config_file.html#config-file
+
+# Import discovery
+# -------------------------------------------------------------------------------------------------
+
+# Suppresses error messages about imports that cannot be resolved.
+# If this option is used in a per-module section, the module name should match the name of the
+# imported module, not the module containing the import statement.
+ignore_missing_imports=true
+
+# Platform configuration
+# -------------------------------------------------------------------------------------------------
+
+# Specifies the Python version used to parse and check the target program.
+# The string should be in the format DIGIT.DIGIT – for example 2.7.
+# The default is the version of the Python interpreter used to run mypy.
+python_version=3.11
+
+
+# None and Optional handling
+# -------------------------------------------------------------------------------------------------
+
+# Enables or disables strict Optional checks.
+# If False, mypy treats None as compatible with every type.
+strict_optional=false
+
+# Configuring warnings
+# -------------------------------------------------------------------------------------------------
+
+# Warns about casting an expression to its inferred type.
+warn_redundant_casts=true
+
+# Warns about unneeded # type: ignore comments.
+warn_unused_ignores=false
+
+# Shows a warning when returning a value with type Any from a function declared with a
+# non-Any return type.
+warn_return_any=false
+
+# Shows a warning when encountering any code inferred to be unreachable or
+# redundant after performing type analysis.
+warn_unreachable=false
+
+
+# Miscellaneous strictness flags
+# -------------------------------------------------------------------------------------------------
+
+# Prohibit equality checks, identity checks, and container checks between
+# non-overlapping types.
+strict_equality=false
+
+# Configuring error messages
+# -------------------------------------------------------------------------------------------------
+
+# Prefixes each error with the relevant context.
+show_error_context=true
+
+# Shows error codes in error messages.
+# See https://mypy.readthedocs.io/en/stable/error_codes.html#error-codes for more information.
+show_error_codes=true
+
+# Use visually nicer output in error messages: use soft word wrap, show source code snippets, and show error location markers.
+pretty=true
+
+# Shows a short summary line after error messages.
+error_summary=false
+
+
+# Advanced options
+# -------------------------------------------------------------------------------------------------
+
+# Shows traceback on fatal error.
+show_traceback=true
+
+# Raise exception on fatal error.
+raise_exceptions=true
+
+
+# Report generation
+# -------------------------------------------------------------------------------------------------
+
+# Causes mypy to generate a text file report documenting how many expressions of type Any are
+# present within your codebase.
+# any_exprs_report="out/mypy/"
+
+# Causes mypy to generate a JSON file that maps each source file’s absolute filename to a list of
+# line numbers that belong to typed functions in that file.
+# lineprecision_report="out/mypy/"
+
+# Causes mypy to generate a text file type checking coverage report.
+# You must install the lxml library to generate this report.
+# txt_report="out/mypy/"
+
+
+# Miscellaneous
+# -------------------------------------------------------------------------------------------------
+
+# Causes mypy to generate a JUnit XML test result document with type checking results.
+# This can make it easier to integrate mypy with continuous integration (CI) tools.
+# junit_xml="out/mypy.xml"
+
+# Warns about per-module sections in the config file that do not match any files processed when
+# invoking mypy. (This requires turning off incremental mode using incremental = False.)
+warn_unused_configs=true
+
+# Controls how much debug output will be generated. Higher numbers are more verbose.
+verbosity=0
