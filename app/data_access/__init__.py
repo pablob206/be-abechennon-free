@@ -8,6 +8,10 @@ from .settings_data import (
 from .utils_data import (
     update_add_obj_query,
     delete_obj_query,
+    insert_document,
+    get_document,
+    get_all_document,
+    delete_document,
 )
 from .bot_data import (
     clear_cache,

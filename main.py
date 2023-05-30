@@ -32,4 +32,4 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
 if __name__ == "main":
-    asyncio.ensure_future(init_binance_websocket_engine(with_cache_cleaning=True))
+    asyncio.ensure_future(init_binance_websocket_engine(cache_clear=True))
