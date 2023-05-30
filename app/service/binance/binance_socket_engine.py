@@ -27,8 +27,9 @@ from app.service.settings import get_settings_status
 from app.data_access import clear_cache, get_settings_query
 
 
-async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
-    with_cache_cleaning: bool | None = False,
+# pylint: disable=too-many-locals, too-many-branches
+async def init_binance_websocket_engine(
+    cache_clear: bool | None = False,
     db_session: AsyncSession | None = None,
 ) -> None:
     """
@@ -80,7 +81,7 @@ async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
             continue
         market_data_start = True
 
-    if with_cache_cleaning:
+    if cache_clear:
         clear_cache()
 
     settings_db: Settings = await get_settings_query(db_session=db_session)
@@ -101,7 +102,7 @@ async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
         client=binance_client(), user_timeout=60
     ).multiplex_socket(streams=kline_stream)
 
-    if with_cache_cleaning:
+    if cache_clear:
         for interval in settings.BINANCE_SOCKET_INTERVAL:
             await set_klines(
                 pair_list=pair_list,
@@ -118,13 +119,33 @@ async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
                 ):  # {'e': 'error', 'm': 'Queue overflow. Message not filled'}
                     await binance_client().close_connection()
                     await init_binance_websocket_engine(
-                        db_session=db_session, with_cache_cleaning=False
+                        db_session=db_session, cache_clear=False
                     )
                 if not (ml_data := ml_resp.get("data")):
                     continue
                 if "k" in ml_data:
                     event_type, event_time, symbol, tick = ml_data.values()
                     update_klines_cache(pair=symbol, tick=tick)
+
+                    if settings_db.is_real_time:  # real time
+                        for pair in settings_db.pairs:
+                            # signal = await strategy(pair, cache)
+                            # if signal and settings_db.bot_status:
+                            # order_resp = await order()
+                            update_detail_account = True
+                    elif (
+                        not settings_db.is_real_time and tick["x"]
+                    ):  # only kline is finished
+                        for pair in settings_db.pairs:
+                            # signal = await strategy(pair, cache)
+                            # if signal and settings_db.bot_status:
+                            # order_resp = await order()
+                            update_detail_account = True
+
+                    if update_detail_account:
+                        # update detail account
+                        update_detail_account = False
+
                     if tick["x"]:
                         log = MdLogs(
                             eventType=event_type,
@@ -134,7 +155,7 @@ async def init_binance_websocket_engine(  # pylint: disable=too-many-locals
                                 if event_type == SocketTypeEnum.KLINE
                                 else None
                             ),
-                            datetimeAt=datetime.utcnow(),
+                            createdAt=datetime.utcnow(),
                             symbol=symbol,
                             tick=tick,
                         )
