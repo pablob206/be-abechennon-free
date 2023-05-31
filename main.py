@@ -44,8 +44,8 @@ def main(loop_is_running: bool | None = False) -> None:
             asyncio.run(init_binance_websocket_engine(cache_clear=True))
         else:
             asyncio.create_task(init_binance_websocket_engine(cache_clear=True))
-    except KeyboardInterrupt as exc:
-        logger.info(f"Exiting... [{exc}]")
+    except KeyboardInterrupt:
+        logger.info("exiting...")
 
 
 if __name__ == "main":
