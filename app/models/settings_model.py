@@ -42,6 +42,8 @@ class Settings(SQLModel, table=True):  # type: ignore
     flag_on_magic: bool | None = None
     magic_amount: float | None = None
     bot_status: str | None = None
+    strategy_id: str | None = None
+    strategy_name: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(
         default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}

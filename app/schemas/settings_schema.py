@@ -34,6 +34,8 @@ class SettingsBase(BaseModel):
     flag_on_magic: bool = Field(None, title="Flag On Magic")
     magic_amount: float = Field(None, title="Magic Amount")
     bot_status: BotStatusEnum = Field(None, title="Bot Status")
+    strategy_id: str = Field(None, title="Strategy ID")
+    strategy_name: str = Field(None, title="Strategy Name")
     created_at: datetime = Field(None, title="Created At")
     updated_at: datetime = Field(None, title="Updated At")
 
@@ -89,5 +91,7 @@ class SettingsRequest(SettingsBase):
                 "flag_on_magic": False,
                 "magic_amount": 100.0,
                 "bot_status": "RUNNING",
+                "strategy_id": "64772fa930e6d90f266ce7ad",
+                "strategy_name": "Classic RSI strategy",
             }
         }
