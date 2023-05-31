@@ -1,4 +1,7 @@
 """Main app module"""
+# Built-In
+import logging
+
 # Third-Party
 import asyncio
 from fastapi import FastAPI
@@ -9,6 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.api import api_router
 from app.service.binance import init_binance_websocket_engine
+
+logger = logging.getLogger("WebSocketClient")
 
 
 app = FastAPI(
@@ -31,5 +36,18 @@ app.add_middleware(
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
+def main(loop_is_running: bool | None = False) -> None:
+    """Main function to initialize websocket"""
+
+    try:
+        if not loop_is_running:
+            asyncio.run(init_binance_websocket_engine(cache_clear=True))
+        else:
+            asyncio.create_task(init_binance_websocket_engine(cache_clear=True))
+    except KeyboardInterrupt as exc:
+        logger.info(f"Exiting... [{exc}]")
+
+
 if __name__ == "main":
-    asyncio.ensure_future(init_binance_websocket_engine(cache_clear=True))
+    loop = asyncio.get_event_loop()
+    main(loop_is_running=loop.is_running())

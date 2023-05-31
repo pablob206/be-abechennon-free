@@ -2,6 +2,7 @@
 # Built-In
 from datetime import datetime
 import asyncio
+import logging
 
 # Third-Party
 from binance import BinanceSocketManager  # type: ignore
@@ -25,6 +26,8 @@ from app.service.binance.binance_service import (
 )
 from app.service.settings import get_settings_status
 from app.data_access import clear_cache, get_settings_query
+
+logger = logging.getLogger("WebSocketClient")
 
 
 # pylint: disable=too-many-locals, too-many-branches
@@ -110,6 +113,7 @@ async def init_binance_websocket_engine(
                 limit=settings.BINANCE_CACHE_LIMIT,
             )
     try:
+        logger.info("Attempting to connect to Binance Websocket")
         async with multiplex_socket as multiplex_listener:
             while True:
                 if not (ml_resp := await multiplex_listener.recv()):
@@ -161,6 +165,8 @@ async def init_binance_websocket_engine(
                         )
                         log.save()
 
-    except Exception:
+    except Exception as exc:
         await binance_client().close_connection()
+        logger.error("Unexpected error has occurred:")
+        logger.exception(exc)
         raise
