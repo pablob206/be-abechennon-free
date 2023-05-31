@@ -46,6 +46,8 @@ def upgrade() -> None:
         sa.Column("flag_on_magic", sa.Boolean(), nullable=True),
         sa.Column("magic_amount", sa.Float(), nullable=True),
         sa.Column("bot_status", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("strategy_id", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("strategy_name", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),

@@ -50,14 +50,18 @@ async def insert_document(
     return {"status": "success", "document": document}
 
 
-async def get_document(document: DynamicDocument, _id: str | None = None) -> Strategies:
+async def get_document(
+    document: DynamicDocument, _id: str | None = None, name: str | None = None
+) -> Strategies:
     """
-    Get document by '_id' or by last record (Mongo DB)
+    Get document by '_id' or 'name' or last record (Mongo DB)
     """
 
-    if not _id:
-        return document.objects().order_by("-_id").first()
-    return document.objects.get(id=_id)
+    if _id and not name:
+        return document.objects.get(id=_id)
+    if not _id and name:
+        return document.objects.get(name=name)
+    return document.objects().order_by("-_id").first()
 
 
 async def get_all_document(document: DynamicDocument) -> List[Strategies]:
@@ -68,10 +72,17 @@ async def get_all_document(document: DynamicDocument) -> List[Strategies]:
     return document.objects().all()
 
 
-async def delete_document(document: DynamicDocument, _id: str) -> Dict[str, str]:
+async def delete_document(
+    document: DynamicDocument, _id: str | None = None, name: str | None = None
+) -> Dict[str, str]:
     """
-    Delete document permanently by '_id' (Mongo DB)
+    Delete document permanently by '_id' or 'name' (Mongo DB)
     """
 
-    document.objects(id=_id).delete()
-    return {"status": "deleted", "id": _id}
+    if _id and not name:
+        document.objects(id=_id).delete()
+        return {"status": "deleted", "id": _id}
+    if not _id and name:
+        document.objects(name=name).delete()
+        return {"status": "deleted", "name": name}
+    raise ValueError("You must specify '_id' or 'name' parameter")

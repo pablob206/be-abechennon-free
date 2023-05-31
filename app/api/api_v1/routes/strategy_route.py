@@ -60,9 +60,11 @@ async def _add_strategy(strategy_req: StrategyRequest):
 
 
 @router.get(path="/strategy", summary="Get strategy", status_code=status.HTTP_200_OK)
-async def _get_strategy(_id: str | None = None):
+async def _get_strategy(_id: str | None = None, name: str | None = None):
     """
     Get strategy by 'id' or 'last' record
+    - **:param _id:** str, strategy id. I.e: "6476298130c574e734a00b81"
+    - **:param name:** str, strategy name. I.e: "Classic RSI strategy"
     - **:return:** dict, bot strategy. I.e: \n
             {
                 "name": "Classic RSI strategy",
@@ -121,7 +123,7 @@ async def _get_strategy(_id: str | None = None):
             }
     """
 
-    return await get_strategy(_id=_id)
+    return await get_strategy(_id=_id, name=name)
 
 
 @router.get(
@@ -201,12 +203,39 @@ async def _get_all_strategy():
     status_code=status.HTTP_200_OK,
 )
 async def _update_strategy(
-    _id: str,
     strategy_req: StrategyRequest,
+    _id: str | None = None,
+    name: str | None = None,
 ):
     """
     Update strategy by 'id'
     - **:param _id:** str, strategy id. I.e: "6476298130c574e734a00b81"
+    - **:param name:** str, strategy name. I.e: "Classic RSI strategy"
+    - **:Request body:** \n
+            {
+                "name": (str) strategy name. I.e: "Classic RSI strategy",
+                "description": (str) strategy description. I.e: "This is a classic RSI strategy",
+                "data": (list) strategy data. I.e: [
+                    {
+                        "name": "Relative Strength Index (RSI)",
+                        "signal_type": "BUY",
+                        "chartperiod": "900",
+                        "candle_pattern": 0,
+                        "necessary": True,
+                        "keep_signal": "0",
+                        "params": {
+                            "candle_value": {
+                                "type_": "select",
+                                "name": "OHLCV Value",
+                                ...
+                            },
+                            ...
+                        },
+                    },
+                    {...},
+                    {...}
+                ]
+            }
     - **:return:** dict, update strategy. I.e: \n
             {
                 "status": "success",
@@ -217,7 +246,7 @@ async def _update_strategy(
             }
     """
 
-    return await update_strategy(_id=_id, strategy_req=strategy_req)
+    return await update_strategy(_id=_id, name=name, strategy_req=strategy_req)
 
 
 @router.delete(
@@ -225,10 +254,11 @@ async def _update_strategy(
     summary="Delete strategy permanently",
     status_code=status.HTTP_200_OK,
 )
-async def _delete_strategy(_id: str):
+async def _delete_strategy(_id: str | None = None, name: str | None = None):
     """
     Delete strategy permanently by 'id'
     - **:param _id:** str, strategy id. I.e: "6476377060fe99e210eb2fa6"
+    - **:param name:** str, strategy name. I.e: "Classic RSI strategy"
     - **:return:** dict, item deleted. I.e: \n
             {
                 "status": "deleted",
@@ -236,4 +266,4 @@ async def _delete_strategy(_id: str):
             }
     """
 
-    return await delete_strategy(_id=_id)
+    return await delete_strategy(_id=_id, name=name)
