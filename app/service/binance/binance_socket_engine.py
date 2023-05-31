@@ -85,7 +85,7 @@ async def init_binance_websocket_engine(
         market_data_start = True
 
     if cache_clear:
-        clear_cache()
+        clear_cache(db_redis=settings.DB_REDIS_KLINES)
 
     settings_db: Settings = await get_settings_query(db_session=db_session)
 
@@ -131,6 +131,7 @@ async def init_binance_websocket_engine(
                     event_type, event_time, symbol, tick = ml_data.values()
                     update_klines_cache(pair=symbol, tick=tick)
 
+                    update_detail_account = False
                     if settings_db.is_real_time:  # real time
                         for pair in settings_db.pairs:
                             # signal = await strategy(pair, cache)

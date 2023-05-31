@@ -37,7 +37,8 @@ async def get_settings_status(
 
 
 async def get_settings(
-    db_session: AsyncSession, _id: int | None = None
+    db_session: AsyncSession | None = None,
+    _id: int | None = None,
 ) -> SettingsSchema | None:
     """
     Get settings

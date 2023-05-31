@@ -21,7 +21,7 @@ def pytest_sessionstart() -> None:
         "PORT_MONGO": "27017",
         "USER_MONGO": "root",
         "PASSWORD_MONGO": "PASSWORD_MONGO",
-        "DB_REDIS": "0",
+        "DB_REDIS_KLINES": "0",
         "HOST_REDIS": "127.0.0.1",
         "PORT_REDIS": "6379",
         "USER_REDIS": "root",
