@@ -172,7 +172,7 @@ async def set_klines(
     return klines_proccessed_dict
 
 
-def update_klines_cache(pair: str, tick: dict) -> None:
+def update_klines(pair: str, tick: dict) -> None:
     """
     Update klines to cache
     :param pair: str, pair. I.e: "ADAUSDT"
