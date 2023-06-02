@@ -2,6 +2,7 @@
 # Built-In
 from datetime import datetime
 import asyncio
+import logging
 
 # Third-Party
 from binance import BinanceSocketManager  # type: ignore
@@ -20,11 +21,14 @@ from app.service.binance.binance_service import (
     build_stream_name,
     get_pairs_availables,
     set_klines,
-    update_klines_cache,
+    update_klines,
     binance_client,
 )
 from app.service.settings import get_settings_status
+from app.service.strategy import strategy_temp
 from app.data_access import clear_cache, get_settings_query
+
+logger = logging.getLogger("WebSocketClient")
 
 
 # pylint: disable=too-many-locals, too-many-branches
@@ -77,18 +81,19 @@ async def init_binance_websocket_engine(
             or settings_status["status"] != SettingsStatusEnum.FULL
             or market_data_status["status"] != 0
         ):
-            await asyncio.sleep(5)
+            await asyncio.sleep(30)
             continue
         market_data_start = True
 
     if cache_clear:
-        clear_cache()
+        clear_cache(db_redis=settings.DB_REDIS_KLINES)
 
     settings_db: Settings = await get_settings_query(db_session=db_session)
 
     pairs_availables: dict = await get_pairs_availables(
         currency_base=settings_db.currency_base, trading_type=settings_db.trading_type
     )
+
     pair_list = [  # pylint: disable=unnecessary-comprehension
         pair for pair in pairs_availables
     ]
@@ -110,6 +115,7 @@ async def init_binance_websocket_engine(
                 limit=settings.BINANCE_CACHE_LIMIT,
             )
     try:
+        logger.info("Attempting to connect to Binance Websocket")
         async with multiplex_socket as multiplex_listener:
             while True:
                 if not (ml_resp := await multiplex_listener.recv()):
@@ -125,19 +131,22 @@ async def init_binance_websocket_engine(
                     continue
                 if "k" in ml_data:
                     event_type, event_time, symbol, tick = ml_data.values()
-                    update_klines_cache(pair=symbol, tick=tick)
+                    update_klines(pair=symbol, tick=tick)
 
+                    update_detail_account = False
                     if settings_db.is_real_time:  # real time
                         for pair in settings_db.pairs:
-                            # signal = await strategy(pair, cache)
-                            # if signal and settings_db.bot_status:
-                            # order_resp = await order()
-                            update_detail_account = True
+                            signal = await strategy_temp(
+                                pair=pair, settings_db=settings_db
+                            )
+                            if signal and settings_db.bot_status:
+                                # order_resp = await order()
+                                update_detail_account = True
                     elif (
                         not settings_db.is_real_time and tick["x"]
                     ):  # only kline is finished
                         for pair in settings_db.pairs:
-                            # signal = await strategy(pair, cache)
+                            # signal = await strategy_temp(pair=pair, settings_db=settings_db)
                             # if signal and settings_db.bot_status:
                             # order_resp = await order()
                             update_detail_account = True
@@ -161,6 +170,8 @@ async def init_binance_websocket_engine(
                         )
                         log.save()
 
-    except Exception:
+    except Exception as exc:
         await binance_client().close_connection()
+        logger.error("Unexpected error has occurred:")
+        logger.exception(exc)
         raise

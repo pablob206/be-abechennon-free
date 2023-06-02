@@ -9,6 +9,7 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
+from app.config import settings
 from app.models import TradingTypeEnum, WalletTypeEnum
 from app.service.binance import binance_client
 from app.data_access import set_klines_cache, get_klines_cache, get_settings_query
@@ -161,13 +162,17 @@ async def set_klines(
             temp_dict["v"].append(float(historical_klines[5]))
 
         temp_dict_bytes = {key: orjson.dumps(value) for key, value in temp_dict.items()}
-        set_klines_cache(name=f"{pair}_{interval}", mapping=temp_dict_bytes)
+        set_klines_cache(
+            name=f"{pair}_{interval}",
+            mapping=temp_dict_bytes,
+            db_redis=settings.DB_REDIS_KLINES,
+        )
         klines_proccessed_dict[f"{pair}_{interval}"] = temp_dict
 
     return klines_proccessed_dict
 
 
-def update_klines_cache(pair: str, tick: dict) -> None:
+def update_klines(pair: str, tick: dict) -> None:
     """
     Update klines to cache
     :param pair: str, pair. I.e: "ADAUSDT"
@@ -193,7 +198,11 @@ def update_klines_cache(pair: str, tick: dict) -> None:
     """
 
     interval = tick["i"]
-    if not (tick_cache_bytes := get_klines_cache(name=f"{pair}_{interval}")):
+    if not (
+        tick_cache_bytes := get_klines_cache(
+            name=f"{pair}_{interval}", db_redis=settings.DB_REDIS_KLINES
+        )
+    ):
         return
     tick_cache = {}
     for key, value in tick_cache_bytes.items():
@@ -209,4 +218,8 @@ def update_klines_cache(pair: str, tick: dict) -> None:
     temp_dict_bytes: dict = {
         key: orjson.dumps(value) for key, value in tick_cache.items()
     }
-    return set_klines_cache(name=f"{pair}_{interval}", mapping=temp_dict_bytes)
+    return set_klines_cache(
+        name=f"{pair}_{interval}",
+        mapping=temp_dict_bytes,
+        db_redis=settings.DB_REDIS_KLINES,
+    )

@@ -6,4 +6,5 @@ from .strategy_service import (
     get_all_strategy,
     update_strategy,
     delete_strategy,
+    strategy_temp,
 )
