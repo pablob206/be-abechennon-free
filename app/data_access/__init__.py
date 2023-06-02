@@ -13,7 +13,7 @@ from .utils_data import (
     get_all_document,
     delete_document,
 )
-from .bot_data import (
+from .cache import (
     clear_cache,
     set_klines_cache,
     get_klines_cache,

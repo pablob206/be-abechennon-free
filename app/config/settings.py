@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     USER_MONGO: str | None
     PASSWORD_MONGO: str | None
 
-    DB_REDIS: str
+    DB_REDIS_KLINES: str
     HOST_REDIS: str
     PORT_REDIS: int = 6379
     USER_REDIS: str | None
