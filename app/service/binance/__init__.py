@@ -8,5 +8,5 @@ from .binance_service import (
     get_pairs_availables,
     get_assets_details,
     set_klines,
-    update_klines_cache,
+    update_klines,
 )
