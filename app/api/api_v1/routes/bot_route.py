@@ -8,10 +8,22 @@ from app.service.binance import (
     get_assets_details,
 )
 from app.service.settings import get_bot_status
+from app.service.strategy import strategy_temp
 from app.models import TradingTypeEnum, WalletTypeEnum
 from app.api.deps import DBSessionDep
+from app.data_access import get_settings_query
 
 router = APIRouter()
+
+
+@router.get(path="/bot/feat-test")
+async def _feat_test(db_session: DBSessionDep):
+    """
+    Endpoint for feature testing
+    """
+
+    settings_db = await get_settings_query(db_session=db_session)
+    return await strategy_temp(pair="UNIUSDT", settings_db=settings_db)
 
 
 @router.get(path="/bot/status")

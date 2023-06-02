@@ -6,16 +6,21 @@ from typing import Any, List, Dict, Union
 from fastapi import HTTPException
 from mongoengine import DoesNotExist
 from mongoengine import DynamicDocument
+import numpy as np
+import talib as ta
+import orjson
 
 # App
-from app.models import Strategies
+from app.models import Strategies, Settings, SideEnum
 from app.schemas import StrategyRequest
 from app.data_access import (
     insert_document,
     get_document,
     get_all_document,
     delete_document,
+    get_klines_cache,
 )
+from app.config import settings
 
 
 async def add_strategy(
@@ -121,3 +126,38 @@ async def delete_strategy(
             detail=f"Strategy not found [{exc}]",
         ) from exc
     return await delete_document(document=Strategies, _id=_id, name=name)
+
+
+async def strategy_temp(pair: str, settings_db: Settings):
+    """
+    A temporal 'hard-coded' strategy with RSI to testing (todo remove)
+    """
+
+    strategy_data: dict = await get_strategy(_id=settings_db.strategy_id)
+    tick_cache_bytes = get_klines_cache(
+        name=f"{pair}_{settings_db.time_frame}", db_redis=settings.DB_REDIS_KLINES
+    )
+    tick_cache = {
+        key.decode("utf-8"): orjson.loads(value)
+        for key, value in tick_cache_bytes.items()
+    }
+
+    close_list = np.array(tick_cache["c"])
+    indicators_results_list = ta.RSI(close_list, 14)
+
+    signal = None
+    mapping = {"BUY": None, "SELL": None}
+
+    for item in strategy_data["data"]:
+        signal_type = item["signal_type"]
+        signal_when_value = item["params"]["signal_when"]["signal_when_value"]
+        if signal_type in mapping:
+            mapping[signal_type] = signal_when_value
+
+    indicators_results = indicators_results_list[-1]
+    if indicators_results <= mapping["BUY"]:
+        signal = SideEnum.BUY
+    elif indicators_results >= mapping["SELL"]:
+        signal = SideEnum.SELL
+
+    return signal
