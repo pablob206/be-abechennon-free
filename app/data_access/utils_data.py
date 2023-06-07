@@ -22,7 +22,7 @@ async def update_add_obj_query(
     """
 
     db_session.add(item)
-    await db_session.flush()
+    await db_session.commit()
     return item
 
 
@@ -35,7 +35,7 @@ async def delete_obj_query(
     """
 
     await db_session.delete(item)
-    await db_session.flush()
+    await db_session.commit()
     return item
 
 

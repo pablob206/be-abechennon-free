@@ -12,9 +12,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import (
     MdLogs,
     SocketTypeEnum,
-    Settings,
+    Setting,
     AppStatusEnum,
-    SettingsStatusEnum,
+    SettingStatusEnum,
 )
 from app.config import settings
 from app.service.binance.binance_service import (
@@ -24,9 +24,9 @@ from app.service.binance.binance_service import (
     update_klines,
     binance_client,
 )
-from app.service.settings import get_settings_status
+from app.service.setting import get_setting_status
 from app.service.strategy import strategy_temp
-from app.data_access import clear_cache, get_settings_query
+from app.data_access import clear_cache, get_setting_query
 
 logger = logging.getLogger("WebSocketClient")
 
@@ -75,10 +75,10 @@ async def init_binance_websocket_engine(
         market_data_status = (
             await binance_client().get_system_status()
         )  # {'status': 0, 'msg': 'normal'}
-        settings_status = await get_settings_status()
+        setting_status = await get_setting_status()
         if (
             settings.APP_STATUS != AppStatusEnum.RUNNING
-            or settings_status["status"] != SettingsStatusEnum.FULL
+            or setting_status["status"] != SettingStatusEnum.FULL
             or market_data_status["status"] != 0
         ):
             await asyncio.sleep(30)
@@ -88,12 +88,11 @@ async def init_binance_websocket_engine(
     if cache_clear:
         clear_cache(db_redis=settings.DB_REDIS_KLINES)
 
-    settings_db: Settings = await get_settings_query(db_session=db_session)
+    setting_db: Setting = await get_setting_query(db_session=db_session)
 
     pairs_availables: dict = await get_pairs_availables(
-        currency_base=settings_db.currency_base, trading_type=settings_db.trading_type
+        currency_base=setting_db.currency_base, trading_type=setting_db.trading_type
     )
-
     pair_list = [  # pylint: disable=unnecessary-comprehension
         pair for pair in pairs_availables
     ]
@@ -134,18 +133,18 @@ async def init_binance_websocket_engine(
                     update_klines(pair=symbol, tick=tick)
 
                     update_detail_account = False
-                    if settings_db.is_real_time:  # real time
-                        for pair in settings_db.pairs:
+                    if setting_db.is_real_time:  # real time
+                        for pair in setting_db.pairs:
                             signal = await strategy_temp(
-                                pair=pair, settings_db=settings_db
+                                pair=pair, setting_db=setting_db
                             )
-                            if signal and settings_db.bot_status:
+                            if signal and setting_db.bot_status:
                                 # order_resp = await order()
                                 update_detail_account = True
                     elif (
-                        not settings_db.is_real_time and tick["x"]
+                        not setting_db.is_real_time and tick["x"]
                     ):  # only kline is finished
-                        for pair in settings_db.pairs:
+                        for pair in setting_db.pairs:
                             # signal = await strategy_temp(pair=pair, settings_db=settings_db)
                             # if signal and settings_db.bot_status:
                             # order_resp = await order()

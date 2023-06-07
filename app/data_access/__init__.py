@@ -1,9 +1,9 @@
 """Initialize data access layer modules"""
 # App
-from .settings_data import (
-    get_settings_query,
-    delete_settings_query,
-    update_settings_query,
+from .setting_data import (
+    get_setting_query,
+    delete_setting_query,
+    update_setting_query,
 )
 from .utils_data import (
     update_add_obj_query,
@@ -17,4 +17,7 @@ from .cache import (
     clear_cache,
     set_klines_cache,
     get_klines_cache,
+)
+from .order_management_data import (
+    get_orders_query,
 )

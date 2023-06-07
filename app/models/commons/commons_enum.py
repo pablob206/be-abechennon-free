@@ -3,9 +3,9 @@
 from enum import Enum
 
 
-class SettingsStatusEnum(str, Enum):
+class SettingStatusEnum(str, Enum):
     """
-    Define different settings status enum
+    Define different setting status enum
     """
 
     BASIC = "BASIC"
@@ -95,13 +95,13 @@ class ExecTypeEnum(str, Enum):
 class OrdStatusEnum(str, Enum):
     """Define different order status"""
 
-    ORDER_STATUS_NEW = "NEW"
-    ORDER_STATUS_PARTIALLY_FILLED = "PARTIALLY_FILLED"
-    ORDER_STATUS_FILLED = "FILLED"
-    ORDER_STATUS_CANCELED = "CANCELED"
-    ORDER_STATUS_PENDING_CANCEL = "PENDING_CANCEL"
-    ORDER_STATUS_REJECTED = "REJECTED"
-    ORDER_STATUS_EXPIRED = "EXPIRED"
+    NEW = "NEW"
+    PARTIALLY_FILLED = "PARTIALLY_FILLED"
+    FILLED = "FILLED"
+    CANCELED = "CANCELED"
+    PENDING_CANCEL = "PENDING_CANCEL"
+    REJECTED = "REJECTED"
+    EXPIRED = "EXPIRED"
 
 
 class KlineIntervalEnum(str, Enum):
@@ -146,17 +146,17 @@ class OrdTypeEnum(str, Enum):
 class TimeInForceEnum(str, Enum):
     """Define different timeinforce type"""
 
-    TIME_IN_FORCE_GTC = "GTC"
-    TIME_IN_FORCE_IOC = "IOC"
-    TIME_IN_FORCE_FOK = "FOK"
+    GTC = "GTC"
+    IOC = "IOC"
+    FOK = "FOK"
 
 
 class OrderRespEnum(str, Enum):
     """Define diferent order response type"""
 
-    ORDER_RESP_TYPE_ACK = "ACK"
-    ORDER_RESP_TYPE_RESULT = "RESULT"
-    ORDER_RESP_TYPE_FULL = "FULL"
+    ACK = "ACK"
+    RESULT = "RESULT"
+    FULL = "FULL"
 
 
 class AggTradeEnum(str, Enum):

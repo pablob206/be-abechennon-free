@@ -1,4 +1,4 @@
-"""Settings data-access layer module"""
+"""Setting data-access layer module"""
 # Built-In
 from typing import Union, TypeVar
 
@@ -7,22 +7,22 @@ from sqlmodel import SQLModel, select, delete, update, desc
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # App
-from app.models import Settings
+from app.models import Setting
 from app.config import async_session
 
 TypeModel = TypeVar("TypeModel", bound=SQLModel)
 
 
-async def get_settings_query(
+async def get_setting_query(
     _id: int | None = None, db_session: AsyncSession | None = None
-) -> Settings | None:
+) -> Setting | None:
     """
-    Get settings
+    Get setting
     """
 
-    query = select(Settings).where(Settings.id == _id)
+    query = select(Setting).where(Setting.id == _id)
     if not _id:
-        query = select(Settings).order_by(desc(Settings.id)).limit(1)
+        query = select(Setting).order_by(desc(Setting.id)).limit(1)
     if not db_session:
         async with async_session.begin() as db_session:
             pass
@@ -32,15 +32,15 @@ async def get_settings_query(
     return result.one_or_none()
 
 
-async def delete_settings_query(
+async def delete_setting_query(
     _id: int,
     db_session: AsyncSession,
 ) -> dict[str, Union[str, int]]:
     """
-    Delete settings query
+    Delete setting query
     """
 
-    query = delete(Settings).where(Settings.id == _id)
+    query = delete(Setting).where(Setting.id == _id)
     await db_session.exec(query)
     return {
         "delete": "success",
@@ -48,15 +48,15 @@ async def delete_settings_query(
     }
 
 
-async def update_settings_query(
+async def update_setting_query(
     _id: int,
-    settings: Settings,
+    setting: Setting,
     db_session: AsyncSession,
-) -> Settings:
+) -> Setting:
     """
-    Update settings query
+    Update setting query
     """
 
-    query = update(Settings).where(Settings.id == _id).values(**settings.dict())
+    query = update(Setting).where(Setting.id == _id).values(**setting.dict())
     await db_session.exec(query)
-    return settings
+    return setting

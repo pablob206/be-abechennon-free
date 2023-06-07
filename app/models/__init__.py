@@ -1,9 +1,8 @@
 """Initialize models layer modules"""
 # App
-from .settings_model import Settings, MdLogs
 from .commons.security_enum import CriptographyModeEnum
 from .commons.commons_enum import (
-    SettingsStatusEnum,
+    SettingStatusEnum,
     BotStatusEnum,
     AppStatusEnum,
     SocketTypeEnum,
@@ -25,4 +24,6 @@ from .commons.strategy_enum import (
     SignalWhenValueIs,
     ChartPeriodSecEnum,
 )
+from .setting_model import Setting, MdLogs
 from .strategy_model import Strategies
+from .order_model import Order

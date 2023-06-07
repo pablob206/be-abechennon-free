@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlmodel import SQLModel
 
 from app.config import sql_url
-from app.models import Settings
+from app.models import Setting, Order
 
 # import models to auto gen
 
