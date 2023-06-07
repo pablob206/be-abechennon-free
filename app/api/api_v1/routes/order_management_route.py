@@ -29,7 +29,8 @@ async def _create_order(order: OrderSchema, db_session: DBSessionDep):
     - **:Request body:** \n
             {
                 "pair": (str) pair symbol. I.e: "BTCUSDT",
-                "trading_type": (TradingTypeEnum[str]) trading type. I.e: "SPOT" | "MARGIN" | "FUTURES",
+                "trading_type": (TradingTypeEnum[str]) trading type.
+                I.e: "SPOT" | "MARGIN" | "FUTURES",
                 "is_isolated": (bool) is isolated. I.e: False,
                 "side": (SideEnum[str]) order side. I.e: "BUY" | "SELL",
                 "ord_type": (OrdTypeEnum[str]) order type. I.e: "LIMIT" | "MARKET",
