@@ -11,7 +11,7 @@ import talib as ta
 import orjson
 
 # App
-from app.models import Strategies, Settings, SideEnum
+from app.models import Strategies, Setting, SideEnum
 from app.schemas import StrategyRequest
 from app.data_access import (
     insert_document,
@@ -128,14 +128,14 @@ async def delete_strategy(
     return await delete_document(document=Strategies, _id=_id, name=name)
 
 
-async def strategy_temp(pair: str, settings_db: Settings):
+async def strategy_temp(pair: str, setting_db: Setting):
     """
     A temporal 'hard-coded' strategy with RSI to testing (todo remove)
     """
 
-    strategy_data: dict = await get_strategy(_id=settings_db.strategy_id)
+    strategy_data: dict = await get_strategy(_id=setting_db.strategy_id)
     tick_cache_bytes = get_klines_cache(
-        name=f"{pair}_{settings_db.time_frame}", db_redis=settings.DB_REDIS_KLINES
+        name=f"{pair}_{setting_db.time_frame}", db_redis=settings.DB_REDIS_KLINES
     )
     tick_cache = {
         key.decode("utf-8"): orjson.loads(value)

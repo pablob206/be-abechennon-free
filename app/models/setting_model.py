@@ -1,4 +1,4 @@
-"""Settings models module"""
+"""Setting models module"""
 # Built-In
 from datetime import datetime
 
@@ -10,15 +10,15 @@ from mongoengine import (
     DictField,
     DateTimeField,
 )
-from sqlalchemy import Column
-from sqlmodel import SQLModel, Field, JSON
+from sqlmodel import SQLModel, Field, Column, JSON
 
 
-class Settings(SQLModel, table=True):  # type: ignore
+class Setting(SQLModel, table=True):  # type: ignore
     """
-    Settings db model
+    Setting db model
     """
 
+    __tablename__ = "settings"
     id: int = Field(primary_key=True, nullable=False)
     binance_api_key: str | None = None
     binance_api_secret: str | None = None
