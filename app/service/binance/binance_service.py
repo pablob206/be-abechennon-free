@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.models import TradingTypeEnum, WalletTypeEnum
 from app.service.binance import binance_client
-from app.data_access import set_klines_cache, get_klines_cache, get_settings_query
+from app.data_access import set_klines_cache, get_klines_cache, get_setting_query
 
 
 def build_stream_name(
@@ -50,8 +50,8 @@ async def get_assets_details(
             detail=f"Assets details not available for wallet [{wallet}]",
         )
 
-    if not (settings_db := await get_settings_query(db_session=db_session)):
-        raise HTTPException(status_code=404, detail="Settings not found")
+    if not (setting_db := await get_setting_query(db_session=db_session)):
+        raise HTTPException(status_code=404, detail="Setting not found")
 
     if not (margin_account := await binance_client().get_margin_account()):
         raise HTTPException(status_code=404, detail="Margin account not found")
@@ -59,8 +59,8 @@ async def get_assets_details(
     total_margin_account = {}
     for user_assets in margin_account["userAssets"]:
         current_data = {}
-        for pair in settings_db.pairs:
-            if user_assets["asset"] == pair.replace(settings_db.currency_base, ""):
+        for pair in setting_db.pairs:
+            if user_assets["asset"] == pair.replace(setting_db.currency_base, ""):
                 price = 0
                 if pair != "USDT":
                     if not (

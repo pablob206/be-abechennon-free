@@ -8,6 +8,7 @@ from fastapi import APIRouter, status
 # App
 from app.config import settings, disconnect
 from app.service.binance import binance_client
+from app.config import async_session
 
 router = APIRouter()
 
@@ -30,6 +31,8 @@ async def shutdown_event() -> None:
 
     await binance_client.stop()
     disconnect()
+    async with async_session.begin() as db_session:
+        await db_session.close()
     print("Bye! \nShutdown, Abechennon-Free")
 
 

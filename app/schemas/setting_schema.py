@@ -1,4 +1,4 @@
-"""Settings schemas module"""
+"""Setting schemas module"""
 # Built-In
 from datetime import datetime
 
@@ -9,8 +9,8 @@ from pydantic import BaseModel, Field
 from app.models import BotStatusEnum, TradingTypeEnum, OrdTypeEnum
 
 
-class SettingsBase(BaseModel):
-    """Settings base"""
+class SettingBase(BaseModel):
+    """Setting base"""
 
     binance_api_key: str = Field(None, title="Binance API Key")
     binance_api_secret: str = Field(None, title="Binance API Secret")
@@ -40,14 +40,14 @@ class SettingsBase(BaseModel):
     updated_at: datetime = Field(None, title="Updated At")
 
 
-class SettingsSchema(SettingsBase):
-    """Settings schema"""
+class SettingSchema(SettingBase):
+    """Setting schema"""
 
     id: int
 
 
-class SettingsRequest(SettingsBase):
-    """Settings request"""
+class SettingRequest(SettingBase):
+    """Setting request"""
 
     class Config:
         """Config request schema"""
