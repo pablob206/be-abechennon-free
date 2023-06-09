@@ -33,7 +33,7 @@ from app.data_access import clear_cache, get_setting_query
 logger = logging.getLogger("WebSocketClient")
 
 
-# pylint: disable=too-many-locals, too-many-branches
+# pylint: disable=too-many-locals, too-many-branches, too-many-statements
 async def init_binance_websocket_engine(
     cache_clear: bool | None = False,
     db_session: AsyncSession | None = None,
@@ -145,24 +145,28 @@ async def init_binance_websocket_engine(
                                 pair=pair, setting_db=setting_db
                             )
                             if signal and setting_db.bot_status:
-                                order_resp = await create_order(
-                                    db_session=db_session, 
+                                await create_order(
+                                    db_session=db_session,
                                     order=OrderSchema(
                                         pair=pair,
                                         trading_type=setting_db.trading_type,
                                         side=signal,
                                         ord_type=setting_db.order_type,
                                         orig_qty=setting_db.amount_per_order,
-                                    )
+                                    ),
                                 )
                                 update_detail_account = True
                     elif (
                         not setting_db.is_real_time and tick["x"]
                     ):  # only kline is finished
                         for pair in setting_db.pairs:
-                            signal = await strategy_temp(pair=pair, setting_db=setting_db)
+                            signal = await strategy_temp(
+                                pair=pair, setting_db=setting_db
+                            )
                             if signal and setting_db.bot_status:
-                                order_resp = await create_order(db_session=db_session, order=OrderSchema())
+                                await create_order(
+                                    db_session=db_session, order=OrderSchema()
+                                )
                             update_detail_account = True
 
                     if update_detail_account:
