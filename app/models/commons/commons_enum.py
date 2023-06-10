@@ -3,16 +3,6 @@
 from enum import Enum
 
 
-class SettingStatusEnum(str, Enum):
-    """
-    Define different setting status enum
-    """
-
-    BASIC = "BASIC"
-    PARTIAL = "PARTIAL"
-    FULL = "FULL"
-
-
 class BotStatusEnum(str, Enum):
     """
     Define different bot status enum
