@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 
 # App
+from app.config import logger
 from app.service.binance import binance_client
 from app.models import Order, TradingTypeEnum
 from app.schemas import OrderSchema
@@ -15,7 +16,7 @@ from app.data_access import (
 
 async def create_order(order: OrderSchema, db_session: AsyncSession) -> Order:
     """
-    Create order
+    Create order (Only MARGIN trading supported)
     order_resp = {
         "symbol": "BTCUSDT",
         "orderId": 28,
@@ -52,14 +53,14 @@ async def create_order(order: OrderSchema, db_session: AsyncSession) -> Order:
     if order.trading_type != TradingTypeEnum.MARGIN:
         raise HTTPException(
             status_code=400,
-            detail=f"Only [{TradingTypeEnum.MARGIN}] trading is supported",
+            detail=f"Only [{TradingTypeEnum.MARGIN}] trading supported",
         )
 
     order_db = Order(**order.dict())
     await update_add_obj_query(item=order_db, db_session=db_session)
 
-    if not (
-        order_resp := binance_client().create_margin_order(
+    try:
+        order_resp = await binance_client().create_margin_order(
             symbol=order.pair,
             isIsolated=order.is_isolated,
             side=order.side,
@@ -68,10 +69,11 @@ async def create_order(order: OrderSchema, db_session: AsyncSession) -> Order:
             timeInForce=order.time_in_force,
             price=order.limit_price,
         )
-    ):
+    except Exception as exc:
+        logger.error("Failed to create order")
         raise HTTPException(
             status_code=400, detail=f"Failed to create [{order.trading_type}] order"
-        )
+        ) from exc
 
     order_db.order_id = order_resp.get("orderId")
     order_db.client_order_id = order_resp.get("clientOrderId")
