@@ -36,18 +36,5 @@ app.add_middleware(
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-def main(loop_is_running: bool | None = False) -> None:
-    """Main function to initialize websocket"""
-
-    try:
-        if not loop_is_running:
-            asyncio.run(init_binance_websocket_engine(cache_clear=True))
-        else:
-            asyncio.create_task(init_binance_websocket_engine(cache_clear=True))
-    except KeyboardInterrupt:
-        logger.info("exiting...")
-
-
 if __name__ == "main":
-    loop = asyncio.get_event_loop()
-    main(loop_is_running=loop.is_running())
+    asyncio.ensure_future(init_binance_websocket_engine(cache_clear=True))
