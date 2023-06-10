@@ -184,22 +184,3 @@ class WsDeepthEnum(str, Enum):
     WEBSOCKET_DEPTH_5 = "5"
     WEBSOCKET_DEPTH_10 = "10"
     WEBSOCKET_DEPTH_20 = "20"
-
-
-class LendingStatusEnum(str, Enum):
-    """
-    Define different lending status
-    """
-
-    PENDING = "PENDING"
-    APPROVED = "APPROVED"
-    ERROR = "ERROR"
-
-
-class LoanOperationTypeEnum(str, Enum):
-    """
-    Define different loan operations type
-    """
-
-    CREATE_MARGIN_LOAN = "CREATE_MARGIN_LOAN"
-    REPAY_MARGIN_LOAN = "REPAY_MARGIN_LOAN"

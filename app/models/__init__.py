@@ -18,13 +18,15 @@ from .commons.commons_enum import (
     OrderRespEnum,
     AggTradeEnum,
     WsDeepthEnum,
-    LendingStatusEnum,
-    LoanOperationTypeEnum,
 )
 from .commons.strategy_enum import (
     OhlcvValueEnum,
     SignalWhenValueIs,
     ChartPeriodSecEnum,
+)
+from .commons.loan_enum import (
+    LoanStatusEnum,
+    LoanOperationTypeEnum,
 )
 from .setting_model import Setting, MdLogs
 from .strategy_model import Strategies
