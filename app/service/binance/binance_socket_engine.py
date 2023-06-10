@@ -16,7 +16,8 @@ from app.models import (
     AppStatusEnum,
     SettingStatusEnum,
 )
-from app.config import settings
+from app.schemas import OrderSchema
+from app.config import settings, async_session
 from app.service.binance.binance_service import (
     build_stream_name,
     get_pairs_availables,
@@ -26,12 +27,13 @@ from app.service.binance.binance_service import (
 )
 from app.service.setting import get_setting_status
 from app.service.strategy import strategy_temp
+from app.service.order_management import create_order
 from app.data_access import clear_cache, get_setting_query
 
 logger = logging.getLogger("WebSocketClient")
 
 
-# pylint: disable=too-many-locals, too-many-branches
+# pylint: disable=too-many-locals, too-many-branches, too-many-statements
 async def init_binance_websocket_engine(
     cache_clear: bool | None = False,
     db_session: AsyncSession | None = None,
@@ -88,6 +90,10 @@ async def init_binance_websocket_engine(
     if cache_clear:
         clear_cache(db_redis=settings.DB_REDIS_KLINES)
 
+    if not db_session:
+        async with async_session.begin() as db_session:
+            pass
+
     setting_db: Setting = await get_setting_query(db_session=db_session)
 
     pairs_availables: dict = await get_pairs_availables(
@@ -139,15 +145,28 @@ async def init_binance_websocket_engine(
                                 pair=pair, setting_db=setting_db
                             )
                             if signal and setting_db.bot_status:
-                                # order_resp = await order()
+                                await create_order(
+                                    db_session=db_session,
+                                    order=OrderSchema(
+                                        pair=pair,
+                                        trading_type=setting_db.trading_type,
+                                        side=signal,
+                                        ord_type=setting_db.order_type,
+                                        orig_qty=setting_db.amount_per_order,
+                                    ),
+                                )
                                 update_detail_account = True
                     elif (
                         not setting_db.is_real_time and tick["x"]
                     ):  # only kline is finished
                         for pair in setting_db.pairs:
-                            # signal = await strategy_temp(pair=pair, settings_db=settings_db)
-                            # if signal and settings_db.bot_status:
-                            # order_resp = await order()
+                            signal = await strategy_temp(
+                                pair=pair, setting_db=setting_db
+                            )
+                            if signal and setting_db.bot_status:
+                                await create_order(
+                                    db_session=db_session, order=OrderSchema()
+                                )
                             update_detail_account = True
 
                     if update_detail_account:
@@ -174,3 +193,5 @@ async def init_binance_websocket_engine(
         logger.error("Unexpected error has occurred:")
         logger.exception(exc)
         raise
+    finally:
+        await db_session.close()

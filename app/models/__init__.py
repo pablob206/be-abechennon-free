@@ -18,6 +18,8 @@ from .commons.commons_enum import (
     OrderRespEnum,
     AggTradeEnum,
     WsDeepthEnum,
+    LendingStatusEnum,
+    LoanOperationTypeEnum,
 )
 from .commons.strategy_enum import (
     OhlcvValueEnum,
@@ -27,3 +29,4 @@ from .commons.strategy_enum import (
 from .setting_model import Setting, MdLogs
 from .strategy_model import Strategies
 from .order_model import Order
+from .loan_model import Loan

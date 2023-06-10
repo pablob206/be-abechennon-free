@@ -1,4 +1,4 @@
-"""Security layer module"""
+"""Utilities layer module"""
 # Built-In
 from typing import TypeVar
 
