@@ -9,7 +9,7 @@ from sqlmodel import SQLModel, Field, Column, BIGINT
 from app.models import (
     TradingTypeEnum,
     LoanOperationTypeEnum,
-    LendingStatusEnum,
+    LoanStatusEnum,
 )
 
 
@@ -24,7 +24,7 @@ class Loan(SQLModel, table=True):  # type: ignore
     amount: float
     trading_type: TradingTypeEnum
     loan_operation_type: LoanOperationTypeEnum
-    status: LendingStatusEnum = LendingStatusEnum.PENDING
+    status: LoanStatusEnum = LoanStatusEnum.PENDING
     tran_id: int | None = Field(sa_column=Column(BIGINT))
     client_tag: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
