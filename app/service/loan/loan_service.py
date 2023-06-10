@@ -43,7 +43,7 @@ async def loan_operations(
         raise HTTPException(
             status_code=400,
             detail=f"Error creating loan: {exc}",
-        )
+        ) from exc
     finally:
         await update_add_obj_query(item=loan_db, db_session=db_session)
 
