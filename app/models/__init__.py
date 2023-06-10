@@ -2,7 +2,6 @@
 # App
 from .commons.security_enum import CriptographyModeEnum
 from .commons.commons_enum import (
-    SettingStatusEnum,
     BotStatusEnum,
     AppStatusEnum,
     SocketTypeEnum,
@@ -24,6 +23,7 @@ from .commons.strategy_enum import (
     SignalWhenValueIs,
     ChartPeriodSecEnum,
 )
+from .commons.setting_enum import SettingStatusEnum
 from .commons.loan_enum import (
     LoanStatusEnum,
     LoanOperationTypeEnum,

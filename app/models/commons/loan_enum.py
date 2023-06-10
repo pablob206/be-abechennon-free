@@ -1,4 +1,4 @@
-"""Commons Enum module"""
+"""Loan Enum module"""
 # Built-In
 from enum import Enum
 
