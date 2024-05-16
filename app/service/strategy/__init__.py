@@ -1,4 +1,4 @@
-"""Initialize strategy layer modules"""
+"""Initialize strategy service layer modules"""
 # App
 from .strategy_service import (
     add_strategy,

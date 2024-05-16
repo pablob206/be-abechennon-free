@@ -1,29 +1,19 @@
 """Config MySql database instance"""
 # Built-In
 from functools import wraps
-from typing import AsyncGenerator
-
-# Third-Party
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
-from sqlmodel import Field
-from sqlmodel.ext.asyncio.session import AsyncSession
+from typing import Any, AsyncGenerator
 
 # App
-from app.config import settings
+from config import get_cache_settings
+from pydantic import Field
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio.session import AsyncSession
+
+# Third-Party
+from sqlalchemy.orm import sessionmaker
 
 
-sql_url = (
-    settings.TYPE_MYSQL
-    + "://"
-    + settings.USER_MYSQL
-    + ":"
-    + settings.PASSWORD_MYSQL
-    + "@"
-    + settings.HOST_MYSQL
-    + "/"
-    + settings.DB_MYSQL
-)
+sql_url = get_cache_settings().SQL_URL
 
 async_session = sessionmaker(
     create_async_engine(sql_url, future=True, echo=False),
@@ -43,21 +33,23 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
         try:
             yield session
             await session.commit()
-        except:
+        except:  # noqa
             await session.rollback()
             raise
         finally:
             await session.close()
 
 
-def set_default_index(func):
+def set_default_index(func) -> Any:  # type: ignore
     """set default ddbb index"""
 
     @wraps(func)
-    def inner(*args, index=False, **kwargs):
+    def inner(*args, index=False, **kwargs) -> Any:  # type: ignore
+        """Inner function"""
+
         return func(*args, index=index, **kwargs)
 
     return inner
 
 
-Field = set_default_index(Field)
+Field = set_default_index(func=Field)

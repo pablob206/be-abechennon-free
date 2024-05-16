@@ -4,14 +4,15 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
 # App
-from app.config import settings
+from config import get_cache_settings
 
 
 class AesCipher:
     """AES Cipher"""
 
-    def __init__(self, key_aes: str | None = settings.KEY_AES):
+    def __init__(self, key_aes: str | None = get_cache_settings().KEY_AES):
         """Init"""
+
         self.key_aes: bytes = key_aes.encode("utf-8")
         self._iv = self.key_aes[:16]
         self.cipher = Cipher(
@@ -20,6 +21,7 @@ class AesCipher:
 
     def encrypt(self, text: str) -> str:
         """AES encrypt text"""
+
         encryptor = self.cipher.encryptor()
         length = 16
         count = len(text.encode("utf-8"))
@@ -33,6 +35,7 @@ class AesCipher:
 
     def decrypt(self, text: str) -> str:
         """AES decrypt text"""
+
         decryptor = self.cipher.decryptor()
         ciphertext = self.from_hex(text)
         plain_text = decryptor.update(ciphertext) + decryptor.finalize()
@@ -41,9 +44,11 @@ class AesCipher:
     @staticmethod
     def to_hex(data):
         """Convert bytes to hex string"""
+
         return data.hex()
 
     @staticmethod
     def from_hex(hex_string):
         """Convert hex string to bytes"""
+
         return bytes.fromhex(hex_string)

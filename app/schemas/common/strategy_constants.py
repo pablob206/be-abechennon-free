@@ -1,10 +1,10 @@
-"""Strategy Enum module"""
+"""Module to store strategy constants used in the project"""
 # Built-In
-from enum import Enum
+from enum import StrEnum, IntEnum
 
 
-class OhlcvValueEnum(str, Enum):
-    """Define different ohlcv value"""
+class OhlcvValueEnum(StrEnum):
+    """Define different ohlcv value types"""
 
     OPEN_TIME = "open_time"
     OPEN = "open"
@@ -20,8 +20,8 @@ class OhlcvValueEnum(str, Enum):
     IGNORE = "ignore"
 
 
-class SignalWhenValueIs(str, Enum):
-    """Define different signal when value is"""
+class SignalWhenValueIs(StrEnum):
+    """Define different signal when value is ..."""
 
     LESS_THAN = "LESS_THAN (<)"
     LESS_THAN_OR_EQUAL = "LESS_THAN_OR_EQUAL  (<=)"
@@ -30,8 +30,8 @@ class SignalWhenValueIs(str, Enum):
     GREATER_THAN = "GREATER_THAN (>)"
 
 
-class ChartPeriodSecEnum(str, Enum):
-    """Define different chart period in seconds"""
+class ChartPeriodSecEnum(IntEnum):
+    """Define different chart period in seconds types"""
 
     ONE_MIN = 60
     THREE_MIN = 180

@@ -3,12 +3,12 @@
 from mongoengine import connect, disconnect  # pylint: disable=unused-import
 
 # App
-from app.config import settings
+from config import get_cache_settings
 
 
 mongo_client = connect(
-    db=settings.DB_MONGO,
-    host=settings.HOST_MONGO,
-    port=settings.PORT_MONGO,
+    db=get_cache_settings().DB_MONGO,
+    host=get_cache_settings().HOST_MONGO,
+    port=get_cache_settings().PORT_MONGO,
     uuidRepresentation="standard",
 )

@@ -12,9 +12,10 @@ import app.api.api_v1.routes.loan_route as loan
 
 
 api_router = APIRouter()
-api_router.include_router(root.router, tags=["Info"])
-api_router.include_router(setting.router, tags=["Setting"])
-api_router.include_router(bot.router, tags=["Bot"])
-api_router.include_router(order_management.router, tags=["Order Management"])
-api_router.include_router(loan.router, tags=["Loan"])
-api_router.include_router(strategy.router, tags=["Strategy"])
+
+api_router.include_router(router=root.router, tags=["Info"])
+api_router.include_router(router=setting.router, tags=["Setting"])
+api_router.include_router(router=bot.router, tags=["Bot"])
+api_router.include_router(router=order_management.router, tags=["Order Management"])
+api_router.include_router(router=loan.router, tags=["Loan"])
+api_router.include_router(router=strategy.router, tags=["Strategy"])

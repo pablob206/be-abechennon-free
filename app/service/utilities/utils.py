@@ -6,7 +6,7 @@ from typing import TypeVar
 from pydantic import BaseModel
 
 # App
-from app.models import CriptographyModeEnum
+from app.schemas import CriptographyModeEnum
 from app.core import aes_cipher
 
 TypeModel = TypeVar("TypeModel", bound=BaseModel)

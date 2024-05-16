@@ -7,9 +7,9 @@ from app.service.binance import (
     get_pairs_availables,
     get_assets_details,
 )
-from app.service.setting import get_bot_status
+from app.service.setting import SettingsService
 from app.service.strategy import strategy_temp
-from app.models import TradingTypeEnum, WalletTypeEnum
+from app.schemas import TradingTypeEnum, WalletTypeEnum
 from app.api.deps import DBSessionDep
 from app.data_access import get_setting_query
 
@@ -17,7 +17,7 @@ router = APIRouter()
 
 
 @router.get(path="/bot/feat-test")
-async def _feat_test(db_session: DBSessionDep):
+async def feat_test(db_session: DBSessionDep):
     """
     Endpoint for feature testing
     """
@@ -27,7 +27,7 @@ async def _feat_test(db_session: DBSessionDep):
 
 
 @router.get(path="/bot/status")
-async def _get_bot_status(db_session: DBSessionDep):
+async def get_bot_status(db_session: DBSessionDep):
     """
     Get bot status
     - **:return:** dict, bot status. I.e: \n
@@ -36,11 +36,11 @@ async def _get_bot_status(db_session: DBSessionDep):
             }
     """
 
-    return await get_bot_status(db_session=db_session)
+    return await SettingsService(db_session=db_session).get_bot_status()
 
 
 @router.get(path="/{wallet}/assets")
-async def _get_assets_details(
+async def get_assets_details(
     db_session: DBSessionDep, wallet: WalletTypeEnum = WalletTypeEnum.MARGIN
 ):
     """
@@ -77,7 +77,7 @@ async def _get_assets_details(
 
 
 @router.get(path="/{trade_type}/pairs-availables")
-async def _get_pairs_availables(
+async def get_pairs_availables(
     currency_base: str | None = "USDT",
     trading_type: TradingTypeEnum = TradingTypeEnum.MARGIN,
 ):

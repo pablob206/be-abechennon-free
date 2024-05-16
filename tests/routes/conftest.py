@@ -10,4 +10,5 @@ from main import app
 @pytest.fixture(scope="session")
 def client() -> TestClient:
     """Test client"""
+
     return TestClient(app)

@@ -11,9 +11,7 @@ from app.config import get_db_session, settings
 
 
 def verify_secret_key_dep(secret_key: Annotated[str, Header()]) -> None:
-    """
-    Verify secret key
-    """
+    """Verify secret key"""
 
     if secret_key != settings.SECRET_KEY:
         raise PermissionError("Invalid secret-key")

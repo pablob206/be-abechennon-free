@@ -6,7 +6,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 # App
-from app.models import BotStatusEnum, TradingTypeEnum, OrdTypeEnum
+from app.schemas import BotStatusEnum, TradingTypeEnum, OrdTypeEnum
 
 
 class SettingBase(BaseModel):
@@ -49,49 +49,4 @@ class SettingSchema(SettingBase):
 class SettingRequest(SettingBase):
     """Setting request"""
 
-    class Config:
-        """Config request schema"""
-
-        fields = {
-            "created_at": {"exclude": True},
-            "updated_at": {"exclude": True},
-        }
-        schema_extra = {
-            "example": {
-                "binance_api_key": "gak3ojhK3kNHg4UIU11I",
-                "binance_api_secret": "gak3ojhK3kNHg4UIU11I",
-                "pairs": [
-                    "XLMUSDT",
-                    "NEOUSDT",
-                    "UNIUSDT",
-                    "CRVUSDT",
-                    "COMPUSDT",
-                    "DOTUSDT",
-                    "IOTAUSDT",
-                    "THETAUSDT",
-                    "ALGOUSDT",
-                    "1INCHUSDT",
-                ],
-                "trading_type": "MARGIN",
-                "order_type": "MARKET",
-                "max_open_position": 20,
-                "max_open_position_per_coin": 3,
-                "currency_base": "USDT",
-                "amount_per_order": 33.33,
-                "take_profit_at": 33.33,
-                "enable_stop_loss": True,
-                "stop_loss": 10,
-                "enable_trailing_stop_loss": True,
-                "trailing_stop_loss": 10,
-                "time_frame": "15m",
-                "is_real_time": "",
-                "close_all_position": True,
-                "flag_back_testing": False,
-                "invert_signal": False,
-                "flag_on_magic": False,
-                "magic_amount": 100.0,
-                "bot_status": "RUNNING",
-                "strategy_id": "64772fa930e6d90f266ce7ad",
-                "strategy_name": "Classic RSI strategy",
-            }
-        }
+    pass

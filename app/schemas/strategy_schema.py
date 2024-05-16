@@ -6,7 +6,7 @@ from typing import Dict, List
 from pydantic import BaseModel, Field
 
 # App
-from app.models import SideEnum, ChartPeriodSecEnum
+from app.schemas import SideEnum, ChartPeriodSecEnum
 
 
 class CandleValue(BaseModel):
@@ -95,55 +95,3 @@ class StrategyRequest(BaseModel):
     name: str = Field(None, title="Strategy Name")
     description: str = Field(None, title="Strategy Description")
     data: List[StrategyData] = Field(None, title="Strategy Data")
-
-    class Config:
-        """Config request schema"""
-
-        schema_extra = {
-            "example": {
-                "name": "Classic RSI strategy",
-                "description": "This is a classic RSI strategy",
-                "data": [
-                    {
-                        "name": "Relative Strength Index (RSI)",
-                        "signal_type": "BUY",
-                        "chartperiod": "900",
-                        "candle_pattern": 0,
-                        "necessary": True,
-                        "keep_signal": "0",
-                        "params": {
-                            "candle_value": {
-                                "type_": "select",
-                                "name": "OHLCV Value",
-                                "options": ["open", "close", "high", "low", "volume"],
-                                "default": "close",
-                            },
-                            "period": {
-                                "type_": "number",
-                                "step": 1,
-                                "min_": 1,
-                                "max_": 500,
-                                "name": "RSI Period",
-                                "default": 14,
-                                "value": "14",
-                            },
-                            "signal_when": {
-                                "type_": "value",
-                                "signal_when": "<=",
-                                "signal_when_value": 20,
-                                "defaults": {
-                                    "buy": {
-                                        "signal_when": "<=",
-                                        "signal_when_value": 20,
-                                    },
-                                    "sell": {
-                                        "signal_when": ">=",
-                                        "signal_when_value": 80,
-                                    },
-                                },
-                            },
-                        },
-                    }
-                ],
-            }
-        }

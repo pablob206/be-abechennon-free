@@ -6,10 +6,7 @@ from typing import List
 from fastapi import APIRouter, status
 
 # App
-from app.service.order_management import (
-    create_order,
-    get_orders,
-)
+from app.service.order_management import OrderManagementService
 from app.models import Order
 from app.schemas import OrderSchema
 from app.api import DBSessionDep
@@ -23,7 +20,7 @@ router = APIRouter()
     response_model=Order,
     status_code=status.HTTP_201_CREATED,
 )
-async def _create_order(order: OrderSchema, db_session: DBSessionDep):
+async def create_new_order(order: OrderSchema, db_session: DBSessionDep):
     """
     Create new order (only available for MARGIN trading type)
     - **:Request body:** \n
@@ -76,7 +73,7 @@ async def _create_order(order: OrderSchema, db_session: DBSessionDep):
             }
     """
 
-    return await create_order(order=order, db_session=db_session)
+    return await OrderManagementService(db_session=db_session).create_order(order=order)
 
 
 @router.get(
@@ -85,7 +82,7 @@ async def _create_order(order: OrderSchema, db_session: DBSessionDep):
     response_model=List[Order],
     status_code=status.HTTP_200_OK,
 )
-async def _get_orders(db_session: DBSessionDep, _id: int | None = None):
+async def get_orders(db_session: DBSessionDep, _id: int | None = None):
     """
     Get orders by _id, or all orders (_id = None)
     - **:param _id:** (int, Optional), order id. I.e: 7
@@ -115,4 +112,4 @@ async def _get_orders(db_session: DBSessionDep, _id: int | None = None):
             ]
     """
 
-    return await get_orders(_id=_id, db_session=db_session)
+    return await OrderManagementService(db_session=db_session).get_orders(_id=_id)

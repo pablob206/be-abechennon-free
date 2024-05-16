@@ -6,13 +6,7 @@ from typing import Dict, List, Union
 from fastapi import APIRouter, status
 
 # App
-from app.service.setting import (
-    get_setting_status,
-    get_setting,
-    update_setting,
-    add_setting,
-    delete_setting,
-)
+from app.service.setting import SettingsService
 from app.schemas import SettingSchema, SettingRequest
 from app.api import DBSessionDep
 
@@ -38,7 +32,7 @@ async def _get_setting_status(db_session: DBSessionDep, _id: int | None = None):
             }
     """
 
-    return await get_setting_status(_id=_id, db_session=db_session)
+    return await SettingsService(db_session=db_session).get_setting_status(_id=_id)
 
 
 @router.get(
@@ -64,7 +58,7 @@ async def _get_setting(db_session: DBSessionDep, _id: int | None = None):
             }
     """
 
-    return await get_setting(_id=_id, db_session=db_session)
+    return await SettingsService(db_session=db_session).get_setting(_id=_id)
 
 
 @router.post(
@@ -96,7 +90,7 @@ async def _add_setting(setting_req: SettingRequest, db_session: DBSessionDep):
             }
     """
 
-    return await add_setting(setting_req=setting_req, db_session=db_session)
+    return await SettingsService(db_session=db_session).add_setting(setting_req=setting_req)
 
 
 @router.patch(
@@ -140,7 +134,7 @@ async def _update_setting(
             }
     """
 
-    return await update_setting(_id=_id, setting_req=setting_req, db_session=db_session)
+    return await SettingsService(db_session=db_session).update_setting(_id=_id, setting_req=setting_req)
 
 
 @router.delete(
@@ -157,4 +151,4 @@ async def _delete_setting(_id: int, db_session: DBSessionDep):
             }
     """
 
-    return await delete_setting(_id=_id, db_session=db_session)
+    return await SettingsService(db_session=db_session).delete_setting(_id=_id)

@@ -9,14 +9,8 @@ from binance import BinanceSocketManager  # type: ignore
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
-from app.models import (
-    MdLogs,
-    SocketTypeEnum,
-    Setting,
-    AppStatusEnum,
-    SettingStatusEnum,
-)
-from app.schemas import OrderSchema
+from app.models import MdLogs, Setting
+from app.schemas import OrderSchema, AppStatusEnum, SettingStatusEnum, SocketTypeEnum
 from app.config import settings, async_session
 from app.service.binance.binance_service import (
     build_stream_name,
@@ -25,9 +19,9 @@ from app.service.binance.binance_service import (
     update_klines,
     binance_client,
 )
-from app.service.setting import get_setting_status
+from app.service.setting import SettingsService
 from app.service.strategy import strategy_temp
-from app.service.order_management import create_order
+from app.service.order_management import OrderManagementService
 from app.data_access import clear_cache, get_setting_query
 
 logger = logging.getLogger("WebSocketClient")
@@ -77,7 +71,7 @@ async def init_binance_websocket_engine(
         market_data_status = (
             await binance_client().get_system_status()
         )  # {'status': 0, 'msg': 'normal'}
-        setting_status = await get_setting_status()
+        setting_status = await SettingsService().get_setting_status()
         if (
             settings.APP_STATUS != AppStatusEnum.RUNNING
             or setting_status["status"] != SettingStatusEnum.FULL
@@ -145,8 +139,7 @@ async def init_binance_websocket_engine(
                                 pair=pair, setting_db=setting_db
                             )
                             if signal and setting_db.bot_status:
-                                await create_order(
-                                    db_session=db_session,
+                                await OrderManagementService(db_session=db_session).create_order(
                                     order=OrderSchema(
                                         pair=pair,
                                         trading_type=setting_db.trading_type,
@@ -164,8 +157,8 @@ async def init_binance_websocket_engine(
                                 pair=pair, setting_db=setting_db
                             )
                             if signal and setting_db.bot_status:
-                                await create_order(
-                                    db_session=db_session, order=OrderSchema()
+                                await OrderManagementService(db_session=db_session).create_order(
+                                    order=OrderSchema()
                                 )
                             update_detail_account = True
 

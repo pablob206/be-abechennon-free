@@ -3,7 +3,7 @@
 from pydantic import BaseModel
 
 # App
-from app.models import (
+from app.schemas import (
     TradingTypeEnum,
     OrdTypeEnum,
     SideEnum,
@@ -22,19 +22,3 @@ class OrderSchema(BaseModel):
     orig_qty: float
     time_in_force: TimeInForceEnum | None = TimeInForceEnum.GTC
     limit_price: float | None = None
-
-    class Config:
-        """Config"""
-
-        schema_extra = {
-            "example": {
-                "pair": "BTCUSDT",
-                "trading_type": TradingTypeEnum.MARGIN,
-                "is_isolated": False,
-                "side": SideEnum.BUY,
-                "ord_type": OrdTypeEnum.MARKET,
-                "orig_qty": 1.36,
-                "time_in_force": TimeInForceEnum.GTC,
-                "limit_price": 1802.30,
-            }
-        }

@@ -1,3 +1,3 @@
-"""Initialize loan layer modules"""
+"""Initialize loan service layer modules"""
 # App
-from .loan_service import loan_operations
+from .loan_service import LoanService

@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
 from app.config import settings
-from app.models import TradingTypeEnum, WalletTypeEnum
+from app.schemas import TradingTypeEnum, WalletTypeEnum
 from app.service.binance import binance_client
 from app.data_access import set_klines_cache, get_klines_cache, get_setting_query
 

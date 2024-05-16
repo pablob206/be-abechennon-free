@@ -3,7 +3,7 @@
 from pydantic import BaseModel
 
 # App
-from app.models import TradingTypeEnum
+from app.schemas import TradingTypeEnum
 
 
 class LoanSchema(BaseModel):
@@ -12,14 +12,3 @@ class LoanSchema(BaseModel):
     asset: str
     amount: float
     trading_type: TradingTypeEnum
-
-    class Config:
-        """Config"""
-
-        schema_extra = {
-            "example": {
-                "asset": "USDT",
-                "amount": 20.0,
-                "trading_type": TradingTypeEnum.MARGIN,
-            }
-        }

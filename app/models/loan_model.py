@@ -1,38 +1,31 @@
 """Loan models module"""
-# Built-In
-from datetime import datetime
-
 # Third-Party
-from sqlmodel import SQLModel, Field, Column, BIGINT
+from sqlalchemy import Column, DateTime, Integer, String, func, FLOAT, BIGINT
+from sqlalchemy.orm import class_mapper
 
 # App
-from app.models import (
-    TradingTypeEnum,
-    LoanOperationTypeEnum,
-    LoanStatusEnum,
-)
+from config import Base
+from models import LoanStatusEnum
 
 
-class Loan(SQLModel, table=True):  # type: ignore
-    """
-    Loan db model
-    """
+class Loan(Base):
+    """Loan model"""
 
     __tablename__ = "loans"
-    id: int = Field(primary_key=True, nullable=False)
-    asset: str
-    amount: float
-    trading_type: TradingTypeEnum
-    loan_operation_type: LoanOperationTypeEnum
-    status: LoanStatusEnum = LoanStatusEnum.PENDING
-    tran_id: int | None = Field(sa_column=Column(BIGINT))
-    client_tag: str | None = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(
-        default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}
-    )
+    __table_args__ = {"schema": "be-abechennon-free"}
 
-    class Config:
-        """config"""
+    id = Column(Integer, nullable=False, primary_key=True, autoincrement=True, index=True)
+    asset = Column(String(255), nullable=False)
+    amount = Column(FLOAT, nullable=False)
+    trading_type = Column(String(150), nullable=False)
+    loan_operation_type = Column(String(150), nullable=False)
+    status = Column(String(150), default=LoanStatusEnum.PENDING, nullable=False)
+    tran_id = Column(BIGINT, default=None, nullable=True)
+    client_tag = Column(String(150), default=None, nullable=True)
+    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    created_at = Column(DateTime, nullable=False, default=func.now())
 
-        arbitrary_types_allowed = True
+    def as_dict(self) -> dict:
+        """Return model instance as dict"""
+
+        return {column.key: getattr(self, column.key) for column in class_mapper(self.__class__).mapped_table.columns}

@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-versions: ["3.11"]
+        python-versions: ["3.12"]

@@ -1,22 +1,11 @@
-"""Commons Enum module"""
+"""Module to store commons constants used in the project"""
 # Built-In
-from enum import Enum
+from enum import StrEnum
 
 
-class BotStatusEnum(str, Enum):
+class BotStatusEnum(StrEnum):
     """
-    Define different bot status enum
-    """
-
-    RUNNING = "RUNNING"
-    STOPPED = "STOPPED"
-    MAINTANANCE = "MAINTANANCE"
-    TESTING = "TESTING"
-
-
-class AppStatusEnum(str, Enum):
-    """
-    Define different app status enum
+    Define different bot status types
     """
 
     RUNNING = "RUNNING"
@@ -25,8 +14,19 @@ class AppStatusEnum(str, Enum):
     TESTING = "TESTING"
 
 
-class SocketTypeEnum(str, Enum):
-    """Define different websocket type"""
+class AppStatusEnum(StrEnum):
+    """
+    Define different app status types
+    """
+
+    RUNNING = "RUNNING"
+    STOPPED = "STOPPED"
+    MAINTANANCE = "MAINTANANCE"
+    TESTING = "TESTING"
+
+
+class SocketTypeEnum(StrEnum):
+    """Define different websocket types"""
 
     KLINE = "kline"
     TRADE = "trade"
@@ -35,8 +35,8 @@ class SocketTypeEnum(str, Enum):
     TICKER = "ticker"
 
 
-class TradingTypeEnum(str, Enum):
-    """Define diferent trading type"""
+class TradingTypeEnum(StrEnum):
+    """Define diferent trading types"""
 
     SPOT = "SPOT"
     MARGIN = "MARGIN"
@@ -44,8 +44,8 @@ class TradingTypeEnum(str, Enum):
     P2P = "P2P"
 
 
-class WalletTypeEnum(str, Enum):
-    """Define different wallet type"""
+class WalletTypeEnum(StrEnum):
+    """Define different wallet types"""
 
     SPOT = "spot"
     MARGIN = "margin"
@@ -54,14 +54,14 @@ class WalletTypeEnum(str, Enum):
     FUNDING = "funding"
 
 
-class CurrencyBaseEnum(str, Enum):
-    """Define different currency base"""
+class CurrencyBaseEnum(StrEnum):
+    """Define different currency types"""
 
     USDT = "USDT"
 
 
-class ExecTypeEnum(str, Enum):
-    """Define different execute-type"""
+class ExecTypeEnum(StrEnum):
+    """Define different execute-types"""
 
     NEW = "NEW"  # 0
     DONE_FOR_DAY = "DONE_FOR_DAY"  # 3
@@ -82,8 +82,8 @@ class ExecTypeEnum(str, Enum):
     ORDER_STATUS = "ORDER_STATUS"  # I
 
 
-class OrdStatusEnum(str, Enum):
-    """Define different order status"""
+class OrdStatusEnum(StrEnum):
+    """Define different order status types"""
 
     NEW = "NEW"
     PARTIALLY_FILLED = "PARTIALLY_FILLED"
@@ -94,8 +94,8 @@ class OrdStatusEnum(str, Enum):
     EXPIRED = "EXPIRED"
 
 
-class KlineIntervalEnum(str, Enum):
-    """Define diferent timeframe interval"""
+class KlineIntervalEnum(StrEnum):
+    """Define diferent timeframe interval types"""
 
     KLINE_INTERVAL_1MINUTE = "1m"
     KLINE_INTERVAL_3MINUTE = "3m"
@@ -114,15 +114,15 @@ class KlineIntervalEnum(str, Enum):
     KLINE_INTERVAL_1MONTH = "1M"
 
 
-class SideEnum(str, Enum):
-    """Define different side type"""
+class SideEnum(StrEnum):
+    """Define different side types"""
 
     BUY = "BUY"  # 1
     SELL = "SELL"  # 2
 
 
-class OrdTypeEnum(str, Enum):
-    """Define different order type"""
+class OrdTypeEnum(StrEnum):
+    """Define different order types"""
 
     LIMIT = "LIMIT"
     MARKET = "MARKET"
@@ -133,25 +133,25 @@ class OrdTypeEnum(str, Enum):
     LIMIT_MAKER = "LIMIT_MAKER"
 
 
-class TimeInForceEnum(str, Enum):
-    """Define different timeinforce type"""
+class TimeInForceEnum(StrEnum):
+    """Define different timeinforce types"""
 
     GTC = "GTC"
     IOC = "IOC"
     FOK = "FOK"
 
 
-class OrderRespEnum(str, Enum):
-    """Define diferent order response type"""
+class OrderRespEnum(StrEnum):
+    """Define diferent order response types"""
 
     ACK = "ACK"
     RESULT = "RESULT"
     FULL = "FULL"
 
 
-class AggTradeEnum(str, Enum):
+class AggTradeEnum(StrEnum):
     """
-    Define diferent Aggregate trade.
+    Define diferent Aggregate trade types.
     For accessing the data returned by Client.aggregate_trades().
     """
 
@@ -165,9 +165,9 @@ class AggTradeEnum(str, Enum):
     AGG_BEST_MATCH = "M"
 
 
-class WsDeepthEnum(str, Enum):
+class WsDeepthEnum(StrEnum):
     """
-    Define diferent websocket depth.
+    Define diferent websocket depth types.
     For Websocket Depth these are found on binance.websockets.BinanceSocketManager.
     """
 

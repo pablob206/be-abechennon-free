@@ -11,8 +11,8 @@ import talib as ta
 import orjson
 
 # App
-from app.models import Strategies, Setting, SideEnum
-from app.schemas import StrategyRequest
+from app.models import Strategies, Setting
+from app.schemas import StrategyRequest, SideEnum
 from app.data_access import (
     insert_document,
     get_document,
