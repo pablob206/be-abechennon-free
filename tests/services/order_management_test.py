@@ -1,9 +1,10 @@
 """Order management test layer module"""
+
 # Third-Party
 import pytest
 
 # App
-from app.service.order_management.utils import format_quantity
+from app.service.order_management import OrderManagementService
 
 
 @pytest.mark.parametrize(
@@ -51,4 +52,4 @@ def test_format_quantity(
     Test format_quantity function
     """
 
-    assert format_quantity(value=value) == expected_result
+    assert OrderManagementService.format_quantity(value=value) == expected_result

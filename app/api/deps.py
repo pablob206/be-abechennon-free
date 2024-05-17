@@ -1,4 +1,5 @@
 """Abechennon Free reusable dependencies injection module"""
+
 # Third-Party
 from typing import Annotated
 
@@ -7,15 +8,13 @@ from fastapi import Depends, Header
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # App
-from app.config import get_db_session, settings
+from app.config import get_db_session, get_cache_settings
 
 
 def verify_secret_key_dep(secret_key: Annotated[str, Header()]) -> None:
-    """
-    Verify secret key
-    """
+    """Verify secret key"""
 
-    if secret_key != settings.SECRET_KEY:
+    if secret_key != get_cache_settings().SECRET_KEY:
         raise PermissionError("Invalid secret-key")
 
 

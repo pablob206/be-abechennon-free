@@ -1,52 +1,42 @@
 """Order models module"""
-# Built-In
-from datetime import datetime
-from typing import Dict, List, Any
 
 # Third-Party
-from sqlmodel import SQLModel, Field, Column, JSON, BIGINT
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, func, BIGINT, Float, JSON
+from sqlalchemy.orm import class_mapper
 
 # App
-from app.models import (
-    OrdStatusEnum,
-    TimeInForceEnum,
-    SideEnum,
-    OrdTypeEnum,
-    TradingTypeEnum,
-)
+from app.config import Base
 
 
-class Order(SQLModel, table=True):  # type: ignore
-    """
-    Order db model
-    """
+class Order(Base):
+    """Order model"""
 
     __tablename__ = "orders"
-    id: int = Field(primary_key=True, nullable=False)
-    pair: str
-    trading_type: TradingTypeEnum
-    order_id: int | None = None
-    client_order_id: str | None = None
-    transact_time: int | None = Field(sa_column=Column(BIGINT))
-    price: float | None = None
-    limit_price: float | None = None
-    orig_qty: float
-    executed_qty: float | None = None
-    cummulative_quote_qty: float | None = None
-    status: OrdStatusEnum = OrdStatusEnum.NEW
-    time_in_force: TimeInForceEnum | None = None
-    ord_type: OrdTypeEnum
-    side: SideEnum
-    margin_buy_borrow_amount: float | None = None
-    margin_buy_borrow_asset: str | None = None
-    is_isolated: bool = False
-    fills: List[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON))
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(
-        default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow}
-    )
+    __table_args__ = {"schema": "be-abechennon-free"}
 
-    class Config:
-        """config"""
+    id = Column(Integer, nullable=False, primary_key=True, autoincrement=True, index=True)
+    pair = Column(String(55), nullable=False)
+    trading_type = Column(String(55), nullable=False)
+    order_id = Column(Integer, default=None, nullable=True)
+    client_order_id = Column(String(155), default=None, nullable=True)
+    transact_time = Column(BIGINT, nullable=True)
+    price = Column(Float, default=None, nullable=True)
+    limit_price = Column(Float, default=None, nullable=True)
+    orig_qty = Column(Float, nullable=False)
+    executed_qty = Column(Float, default=None, nullable=True)
+    cummulative_quote_qty = Column(Float, default=None, nullable=True)
+    status = Column(String(55), nullable=False)
+    time_in_force = Column(String(100), default=None, nullable=True)
+    ord_type = Column(String(55), nullable=False)
+    side = Column(String(15), nullable=False)
+    margin_buy_borrow_amount = Column(Float, default=None, nullable=True)
+    margin_buy_borrow_asset = Column(String(100), default=None, nullable=True)
+    is_isolated = Column(Boolean, default=False, nullable=False)
+    fills = Column(JSON, default=None, nullable=True)
+    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    created_at = Column(DateTime, nullable=False, default=func.now())
 
-        arbitrary_types_allowed = True
+    def as_dict(self) -> dict:
+        """Return model instance as dict"""
+
+        return {column.key: getattr(self, column.key) for column in class_mapper(self.__class__).mapped_table.columns}

@@ -1,4 +1,5 @@
-"""Root routes module"""
+"""Root routes module v1"""
+
 # Built-In
 from typing import Dict
 
@@ -6,8 +7,8 @@ from typing import Dict
 from fastapi import APIRouter, status
 
 # App
-from app.config import settings, disconnect
-from app.service.binance import binance_client
+from app.config import get_cache_settings, disconnect
+from app.service import binance_client
 from app.config import async_session
 
 router = APIRouter()
@@ -47,4 +48,4 @@ async def root() -> Dict[str, str]:
             }
     """
 
-    return {"project": settings.PROJECT_NAME, "version": settings.PROJECT_VERSION}
+    return {"project": get_cache_settings().PROJECT_NAME, "version": get_cache_settings().PROJECT_VERSION}

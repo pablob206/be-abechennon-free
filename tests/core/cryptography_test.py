@@ -1,4 +1,5 @@
 """Cryptography test layer module"""
+
 # Third-Party
 import pytest
 

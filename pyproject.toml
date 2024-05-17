@@ -82,7 +82,7 @@ min-public-methods = 0
 
 [tool.pylint.exceptions]
 # Exceptions that will emit a warning when caught.
-overgeneral-exceptions = ["BaseException", "Exception"]
+overgeneral-exceptions = ["builtins.BaseException", "builtins.Exception"]
 
 [tool.pylint.format]
 # Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
@@ -99,7 +99,7 @@ indent-after-paren = 4
 indent-string = "    "
 
 # Maximum number of characters on a single line.
-max-line-length = 100
+max-line-length = 120
 
 # Maximum number of lines in a module.
 max-module-lines = 1000
@@ -150,8 +150,10 @@ logging-modules = ["logging"]
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable = ["import-error", "duplicate-code", "inconsistent-return-statements", "no-name-in-module"]
+disable = ["import-error", "duplicate-code", "inconsistent-return-statements", "cyclic-import", "unnecessary-pass", "assignment"]
 
+[tool.pylint.messages]
+disable = ["R0402"]
 
 [tool.pylint.miscellaneous]
 # List of note tags to take in consideration, separated by a comma.
@@ -205,7 +207,6 @@ check-quote-consistency = true
 # implicit string concatenation in sequences defined over several lines.
 check-str-concat-over-line-jumps = true
 
-
 # Bandit
 [tool.bandit]
 # Find and process files in subdirectories
@@ -217,119 +218,39 @@ exclude_dirs = ["tests"]
 # List of test IDs to skip
 # https://bandit.readthedocs.io/en/latest/config.html#skipping-tests
 # https://bandit.readthedocs.io/en/latest/plugins/index.html#complete-test-plugin-listing
-skips=[]
+skips=["B104", "B311"]
 
 # Specify output format {csv,custom,html,json,screen,txt,xml,yaml}
 # https://bandit.readthedocs.io/en/latest/formatters/index.html#complete-formatter-listing
 format="txt"
 
-
 [tool.mypy]
-# MyPy config file
-# File reference here - http://mypy.readthedocs.io/en/latest/config_file.html#config-file
+plugins = ["pydantic.mypy", "sqlmypy"]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+warn_unused_ignores = true
 
-# Import discovery
-# -------------------------------------------------------------------------------------------------
+follow_imports = "silent"
+warn_redundant_casts = true
+check_untyped_defs = true
+no_implicit_reexport = true
 
-# Suppresses error messages about imports that cannot be resolved.
-# If this option is used in a per-module section, the module name should match the name of the
-# imported module, not the module containing the import statement.
-ignore_missing_imports=true
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
 
-# Platform configuration
-# -------------------------------------------------------------------------------------------------
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+line_length = 120
 
-# Specifies the Python version used to parse and check the target program.
-# The string should be in the format DIGIT.DIGIT – for example 2.7.
-# The default is the version of the Python interpreter used to run mypy.
-python_version=3.11
+[tool.black]
+line-length = 120
+target-version = ['py312']
 
-
-# None and Optional handling
-# -------------------------------------------------------------------------------------------------
-
-# Enables or disables strict Optional checks.
-# If False, mypy treats None as compatible with every type.
-strict_optional=false
-
-# Configuring warnings
-# -------------------------------------------------------------------------------------------------
-
-# Warns about casting an expression to its inferred type.
-warn_redundant_casts=true
-
-# Warns about unneeded # type: ignore comments.
-warn_unused_ignores=false
-
-# Shows a warning when returning a value with type Any from a function declared with a
-# non-Any return type.
-warn_return_any=false
-
-# Shows a warning when encountering any code inferred to be unreachable or
-# redundant after performing type analysis.
-warn_unreachable=false
-
-
-# Miscellaneous strictness flags
-# -------------------------------------------------------------------------------------------------
-
-# Prohibit equality checks, identity checks, and container checks between
-# non-overlapping types.
-strict_equality=false
-
-# Configuring error messages
-# -------------------------------------------------------------------------------------------------
-
-# Prefixes each error with the relevant context.
-show_error_context=true
-
-# Shows error codes in error messages.
-# See https://mypy.readthedocs.io/en/stable/error_codes.html#error-codes for more information.
-show_error_codes=true
-
-# Use visually nicer output in error messages: use soft word wrap, show source code snippets, and show error location markers.
-pretty=true
-
-# Shows a short summary line after error messages.
-error_summary=false
-
-
-# Advanced options
-# -------------------------------------------------------------------------------------------------
-
-# Shows traceback on fatal error.
-show_traceback=true
-
-# Raise exception on fatal error.
-raise_exceptions=true
-
-
-# Report generation
-# -------------------------------------------------------------------------------------------------
-
-# Causes mypy to generate a text file report documenting how many expressions of type Any are
-# present within your codebase.
-# any_exprs_report="out/mypy/"
-
-# Causes mypy to generate a JSON file that maps each source file’s absolute filename to a list of
-# line numbers that belong to typed functions in that file.
-# lineprecision_report="out/mypy/"
-
-# Causes mypy to generate a text file type checking coverage report.
-# You must install the lxml library to generate this report.
-# txt_report="out/mypy/"
-
-
-# Miscellaneous
-# -------------------------------------------------------------------------------------------------
-
-# Causes mypy to generate a JUnit XML test result document with type checking results.
-# This can make it easier to integrate mypy with continuous integration (CI) tools.
-# junit_xml="out/mypy.xml"
-
-# Warns about per-module sections in the config file that do not match any files processed when
-# invoking mypy. (This requires turning off incremental mode using incremental = False.)
-warn_unused_configs=true
-
-# Controls how much debug output will be generated. Higher numbers are more verbose.
-verbosity=0
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

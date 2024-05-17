@@ -1,4 +1,5 @@
 """Order management data-access layer module"""
+
 # Built-In
 from typing import List
 
@@ -14,9 +15,7 @@ async def get_orders_query(
     db_session: AsyncSession,
     _id: int | None = None,
 ) -> List[Order]:
-    """
-    Get orders query
-    """
+    """Get orders query"""
 
     query = select(Order)
     if _id:

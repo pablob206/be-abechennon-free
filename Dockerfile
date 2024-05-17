@@ -1,4 +1,4 @@
-FROM python:3.11-slim as venv
+FROM python:3.12-slim as venv
 
 RUN apt-get update && apt-get -y install git && \
     mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> /root/.ssh/known_hosts
@@ -7,7 +7,7 @@ COPY requirements.txt requirements.txt
 RUN --mount=type=ssh python -m pip install --upgrade pip \
     pip install --no-cache-dir -r requirements.txt -t /packages/
 
-FROM python:3.11-slim as app
+FROM python:3.12-slim as app
 WORKDIR /app/
 ENV PATH /packages/bin:$PATH
 ENV PYTHONPATH /packages

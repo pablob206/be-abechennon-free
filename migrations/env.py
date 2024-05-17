@@ -1,14 +1,18 @@
+"""Script for running migrations"""
+
+# Built-In
 import asyncio
 from logging.config import fileConfig
 
+# Third-Party
 from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlmodel import SQLModel
 
-from app.config import sql_url
-from app.models import Setting, Order, Loan
+# App
+from app.config import sql_url, Base
+from app.models import *  # noqa
 
 # import models to auto gen
 
@@ -27,8 +31,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = SQLModel.metadata
-
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -46,8 +49,8 @@ def run_migrations_offline():
 
     Calls to context.execute() here emit the given string to the
     script output.
-
     """
+
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -74,8 +77,8 @@ async def run_migrations_online():
 
     In this scenario we need to create an Engine
     and associate a connection with the context.
-
     """
+
     connectable = AsyncEngine(
         engine_from_config(
             config.get_section(config.config_ini_section),

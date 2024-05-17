@@ -1,4 +1,5 @@
 """Binance test layer module"""
+
 # Third-Party
 import pytest
 
@@ -56,8 +57,5 @@ def test_build_stream_name(
     """
 
     assert (
-        build_stream_name(
-            pair_list=pair_list, socket_name=socket_name, interval_list=interval_list
-        )
-        == expected_result
+        build_stream_name(pair_list=pair_list, socket_name=socket_name, interval_list=interval_list) == expected_result
     )

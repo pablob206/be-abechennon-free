@@ -1,11 +1,11 @@
-"""Loan routes module"""
+"""Loan routes module v1"""
+
 # Third-Party
 from fastapi import APIRouter, status
 
 # App
-from app.service.loan import loan_operations
-from app.models import Loan, LoanOperationTypeEnum
-from app.schemas import LoanSchema
+from app.service import LoanService
+from app.schemas import LoanRequest, LoanOperationTypeEnum
 from app.api import DBSessionDep
 
 router = APIRouter()
@@ -14,11 +14,10 @@ router = APIRouter()
 @router.post(
     path="/loan/create",
     summary="Create Margin Loan",
-    response_model=Loan,
     response_model_exclude={"id"},
     status_code=status.HTTP_201_CREATED,
 )
-async def _create_loan(loan_request: LoanSchema, db_session: DBSessionDep):
+async def create_loan(loan_request: LoanRequest, db_session: DBSessionDep):
     """
     Create margin loan (only available for MARGIN trading type) \n
     - **:Request body:** \n
@@ -42,21 +41,19 @@ async def _create_loan(loan_request: LoanSchema, db_session: DBSessionDep):
             }
     """
 
-    return await loan_operations(
+    return await LoanService(db_session=db_session).loan_operations(
         loan_request=loan_request,
         loan_operation=LoanOperationTypeEnum.CREATE_MARGIN_LOAN,
-        db_session=db_session,
     )
 
 
 @router.post(
     path="/loan/repay",
     summary="Repay Margin Loan",
-    response_model=Loan,
     response_model_exclude={"id"},
     status_code=status.HTTP_201_CREATED,
 )
-async def _repay_loan(loan_request: LoanSchema, db_session: DBSessionDep):
+async def repay_loan(loan_request: LoanRequest, db_session: DBSessionDep):
     """
     Repay margin loan (only available for MARGIN trading type) \n
     - **:Request body:** \n
@@ -80,8 +77,7 @@ async def _repay_loan(loan_request: LoanSchema, db_session: DBSessionDep):
             }
     """
 
-    return await loan_operations(
+    return await LoanService(db_session=db_session).loan_operations(
         loan_request=loan_request,
         loan_operation=LoanOperationTypeEnum.REPAY_MARGIN_LOAN,
-        db_session=db_session,
     )
