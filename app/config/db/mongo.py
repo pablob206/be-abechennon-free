@@ -1,9 +1,10 @@
 """Config Mongo database instance"""
+
 # Third-Party
 from mongoengine import connect, disconnect  # pylint: disable=unused-import
 
 # App
-from config import get_cache_settings
+from app.config.settings import get_cache_settings
 
 
 mongo_client = connect(

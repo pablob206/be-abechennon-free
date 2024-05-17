@@ -1,23 +1,16 @@
-"""Strategies routes module"""
+"""Strategies routes module v1"""
+
 # Third-Party
 from fastapi import APIRouter, status
 
 # App
-from app.service.strategy import (
-    add_strategy,
-    get_strategy,
-    get_all_strategy,
-    update_strategy,
-    delete_strategy,
-)
+from app.service import StrategyServices
 from app.schemas import StrategyRequest
 
 router = APIRouter()
 
 
-@router.post(
-    path="/strategy", summary="Add strategy", status_code=status.HTTP_201_CREATED
-)
+@router.post(path="/strategy", summary="Add strategy", status_code=status.HTTP_201_CREATED)
 async def _add_strategy(strategy_req: StrategyRequest):
     """
     Add strategy
@@ -123,12 +116,10 @@ async def _get_strategy(_id: str | None = None, name: str | None = None):
             }
     """
 
-    return await get_strategy(_id=_id, name=name)
+    return await StrategyServices.get_strategy(_id=_id, name=name)
 
 
-@router.get(
-    path="/strategy-list", summary="Get all strategy", status_code=status.HTTP_200_OK
-)
+@router.get(path="/strategy-list", summary="Get all strategy", status_code=status.HTTP_200_OK)
 async def _get_all_strategy():
     """
     Get all strategy
@@ -194,7 +185,7 @@ async def _get_all_strategy():
             ]
     """
 
-    return await get_all_strategy()
+    return await StrategyServices.get_all_strategy()
 
 
 @router.patch(
@@ -246,7 +237,7 @@ async def _update_strategy(
             }
     """
 
-    return await update_strategy(_id=_id, name=name, strategy_req=strategy_req)
+    return await StrategyServices.update_strategy(_id=_id, name=name, strategy_req=strategy_req)
 
 
 @router.delete(
@@ -266,4 +257,4 @@ async def _delete_strategy(_id: str | None = None, name: str | None = None):
             }
     """
 
-    return await delete_strategy(_id=_id, name=name)
+    return await StrategyServices.delete_strategy(_id=_id, name=name)

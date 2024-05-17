@@ -1,10 +1,11 @@
 """Config MySql database instance"""
+
 # Built-In
 from functools import wraps
 from typing import Any, AsyncGenerator
 
 # App
-from config import get_cache_settings
+from app.config.settings import get_cache_settings
 from pydantic import Field
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -13,7 +14,17 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
 
-sql_url = get_cache_settings().SQL_URL
+sql_url = (
+    get_cache_settings().TYPE_MYSQL
+    + "://"
+    + get_cache_settings().USER_MYSQL
+    + ":"
+    + get_cache_settings().PASSWORD_MYSQL
+    + "@"
+    + get_cache_settings().HOST_MYSQL
+    + "/"
+    + get_cache_settings().DB_MYSQL
+)
 
 async_session = sessionmaker(
     create_async_engine(sql_url, future=True, echo=False),

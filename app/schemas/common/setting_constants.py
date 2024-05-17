@@ -1,4 +1,5 @@
 """Module to store settings constants used in the project"""
+
 # Built-In
 from enum import StrEnum
 

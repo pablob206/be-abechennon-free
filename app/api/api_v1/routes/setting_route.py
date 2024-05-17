@@ -1,4 +1,5 @@
-"""Setting routes module"""
+"""Setting routes module v1"""
+
 # Built-In
 from typing import Dict, List, Union
 
@@ -6,8 +7,8 @@ from typing import Dict, List, Union
 from fastapi import APIRouter, status
 
 # App
-from app.service.setting import SettingsService
-from app.schemas import SettingSchema, SettingRequest
+from app.service import SettingsService
+from app.schemas import SettingResponse, SettingRequest
 from app.api import DBSessionDep
 
 router = APIRouter()
@@ -38,7 +39,7 @@ async def _get_setting_status(db_session: DBSessionDep, _id: int | None = None):
 @router.get(
     path="/setting",
     summary="Get setting",
-    response_model=SettingSchema,
+    response_model=SettingResponse,
     status_code=status.HTTP_200_OK,
 )
 async def _get_setting(db_session: DBSessionDep, _id: int | None = None):
@@ -64,7 +65,7 @@ async def _get_setting(db_session: DBSessionDep, _id: int | None = None):
 @router.post(
     path="/setting",
     summary="Add setting",
-    response_model=SettingSchema,
+    response_model=SettingResponse,
     response_model_exclude_none=True,
     status_code=status.HTTP_201_CREATED,
 )
@@ -96,14 +97,14 @@ async def _add_setting(setting_req: SettingRequest, db_session: DBSessionDep):
 @router.patch(
     path="/setting",
     summary="Update partial setting",
-    response_model=SettingSchema,
+    response_model=SettingResponse,
     response_model_exclude_none=True,
     status_code=status.HTTP_201_CREATED,
 )
 @router.put(
     path="/setting",
     summary="Update complete setting",
-    response_model=SettingSchema,
+    response_model=SettingResponse,
     response_model_exclude_none=True,
     status_code=status.HTTP_201_CREATED,
 )
@@ -137,9 +138,7 @@ async def _update_setting(
     return await SettingsService(db_session=db_session).update_setting(_id=_id, setting_req=setting_req)
 
 
-@router.delete(
-    path="/setting", summary="Delete setting", status_code=status.HTTP_200_OK
-)
+@router.delete(path="/setting", summary="Delete setting", status_code=status.HTTP_200_OK)
 async def _delete_setting(_id: int, db_session: DBSessionDep):
     """
     Delete setting by _id

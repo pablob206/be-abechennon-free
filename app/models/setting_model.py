@@ -1,4 +1,5 @@
 """Setting models module"""
+
 # Third-Party
 from sqlalchemy import Column, DateTime, Integer, String, func, Float, JSON, Boolean
 from sqlalchemy.orm import class_mapper
@@ -11,7 +12,7 @@ from mongoengine import (
 )
 
 # App
-from config import Base
+from app.config import Base
 
 
 class Setting(Base):

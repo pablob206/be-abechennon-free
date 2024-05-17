@@ -1,4 +1,5 @@
-"""Order schemas module"""
+"""Order request schemas module"""
+
 # Third-Party
 from pydantic import BaseModel
 
@@ -11,8 +12,8 @@ from app.schemas import (
 )
 
 
-class OrderSchema(BaseModel):
-    """Order schema"""
+class OrderRequest(BaseModel):
+    """Order request schema"""
 
     pair: str
     trading_type: TradingTypeEnum

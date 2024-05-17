@@ -1,4 +1,5 @@
 """Test setup"""
+
 # Third-Party
 import pytest
 from fastapi.testclient import TestClient

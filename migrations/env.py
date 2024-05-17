@@ -1,4 +1,5 @@
 """Script for running migrations"""
+
 # Built-In
 import asyncio
 from logging.config import fileConfig
@@ -10,8 +11,8 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 # App
-from config import sql_url, Base
-from models import *  # noqa
+from app.config import sql_url, Base
+from app.models import *  # noqa
 
 # import models to auto gen
 

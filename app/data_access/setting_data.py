@@ -1,4 +1,5 @@
 """Setting data-access layer module"""
+
 # Built-In
 from typing import Union, TypeVar
 
@@ -13,9 +14,7 @@ from app.config import async_session
 TypeModel = TypeVar("TypeModel", bound=SQLModel)
 
 
-async def get_setting_query(
-    _id: int | None = None, db_session: AsyncSession | None = None
-) -> Setting | None:
+async def get_setting_query(_id: int | None = None, db_session: AsyncSession | None = None) -> Setting | None:
     """
     Get setting
     """
@@ -27,7 +26,7 @@ async def get_setting_query(
         async with async_session.begin() as db_session:
             pass
 
-    result = await db_session.exec(query)
+    result = await db_session.execute(query)
     await db_session.close()
     return result.one_or_none()
 

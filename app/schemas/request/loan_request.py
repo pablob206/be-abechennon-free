@@ -1,4 +1,5 @@
-"""Loan schemas module"""
+"""Loan request schemas module"""
+
 # Third-Party
 from pydantic import BaseModel
 
@@ -6,8 +7,8 @@ from pydantic import BaseModel
 from app.schemas import TradingTypeEnum
 
 
-class LoanSchema(BaseModel):
-    """Loan schema"""
+class LoanRequest(BaseModel):
+    """Loan request schema"""
 
     asset: str
     amount: float

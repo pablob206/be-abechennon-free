@@ -1,14 +1,11 @@
-"""Order management routes module"""
-# Built-In
-from typing import List
+"""Order management routes module v1"""
 
 # Third-Party
 from fastapi import APIRouter, status
 
 # App
-from app.service.order_management import OrderManagementService
-from app.models import Order
-from app.schemas import OrderSchema
+from app.service import OrderManagementService
+from app.schemas import OrderRequest
 from app.api import DBSessionDep
 
 router = APIRouter()
@@ -17,10 +14,9 @@ router = APIRouter()
 @router.post(
     path="/order",
     summary="Create new order",
-    response_model=Order,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_new_order(order: OrderSchema, db_session: DBSessionDep):
+async def create_new_order(order: OrderRequest, db_session: DBSessionDep):
     """
     Create new order (only available for MARGIN trading type)
     - **:Request body:** \n
@@ -79,7 +75,6 @@ async def create_new_order(order: OrderSchema, db_session: DBSessionDep):
 @router.get(
     path="/orders",
     summary="Get orders",
-    response_model=List[Order],
     status_code=status.HTTP_200_OK,
 )
 async def get_orders(db_session: DBSessionDep, _id: int | None = None):

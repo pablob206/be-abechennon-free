@@ -1,9 +1,10 @@
 """Config Redis instance"""
+
 # Third-Party
 import redis  # type: ignore
 
 # App
-from config import get_cache_settings
+from app.config import get_cache_settings
 
 
 redis_client = redis.Redis(

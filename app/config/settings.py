@@ -1,7 +1,8 @@
 """Settings module"""
+
 # Built-In
 from functools import lru_cache
-from typing import Any, List
+from typing import Any, List, Union
 
 # Third-Party
 from pydantic import AnyHttpUrl, ValidationInfo, field_validator
@@ -28,11 +29,9 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "Abechennon Free Backend [ CORE ]"
     PROJECT_VERSION: str = "0.1.0"
+    DESCRIPTION: str | None = "Margin trading bot backend for Binance"
 
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
-        "http://127.0.0.1:8000",
-        "http://localhost:5173",
-    ]
+    BACKEND_CORS_ORIGINS: List[Union[AnyHttpUrl, str]] | None = ["http://127.0.0.1:8000", "http://localhost:5173", "*"]
 
     APP_STATUS: str = AppStatusEnum.RUNNING
 

@@ -1,4 +1,5 @@
-"""Setting schemas module"""
+"""Setting request schemas module"""
+
 # Built-In
 from datetime import datetime
 
@@ -40,13 +41,7 @@ class SettingBase(BaseModel):
     updated_at: datetime = Field(None, title="Updated At")
 
 
-class SettingSchema(SettingBase):
-    """Setting schema"""
-
-    id: int
-
-
 class SettingRequest(SettingBase):
-    """Setting request"""
+    """Setting request schema"""
 
     pass

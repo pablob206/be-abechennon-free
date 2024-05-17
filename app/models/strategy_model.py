@@ -1,4 +1,5 @@
 """Strategies models module"""
+
 # Built-In
 from datetime import datetime
 

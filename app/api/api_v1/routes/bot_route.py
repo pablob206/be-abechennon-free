@@ -1,4 +1,5 @@
-"""Bot routes"""
+"""Bot routes module v1"""
+
 # Third-Party
 from fastapi import APIRouter
 
@@ -7,8 +8,7 @@ from app.service.binance import (
     get_pairs_availables,
     get_assets_details,
 )
-from app.service.setting import SettingsService
-from app.service.strategy import strategy_temp
+from app.service import SettingsService, StrategyServices
 from app.schemas import TradingTypeEnum, WalletTypeEnum
 from app.api.deps import DBSessionDep
 from app.data_access import get_setting_query
@@ -23,7 +23,7 @@ async def feat_test(db_session: DBSessionDep):
     """
 
     setting_db = await get_setting_query(db_session=db_session)
-    return await strategy_temp(pair="UNIUSDT", setting_db=setting_db)
+    return await StrategyServices.strategy_temp(pair="UNIUSDT", setting_db=setting_db)
 
 
 @router.get(path="/bot/status")
@@ -40,9 +40,7 @@ async def get_bot_status(db_session: DBSessionDep):
 
 
 @router.get(path="/{wallet}/assets")
-async def get_assets_details(
-    db_session: DBSessionDep, wallet: WalletTypeEnum = WalletTypeEnum.MARGIN
-):
+async def get_assets_details(db_session: DBSessionDep, wallet: WalletTypeEnum = WalletTypeEnum.MARGIN):
     """
     Get assets details by wallet
     - **:param wallet:** WalletTypeEnum (Default WalletTypeEnum.MARGIN),
@@ -95,6 +93,4 @@ async def get_pairs_availables(
             }
     """
 
-    return await get_pairs_availables(
-        currency_base=currency_base, trading_type=trading_type
-    )
+    return await get_pairs_availables(currency_base=currency_base, trading_type=trading_type)

@@ -1,4 +1,5 @@
 """Binance client module"""
+
 # Built-in
 from functools import lru_cache
 from typing import Any
@@ -7,7 +8,7 @@ from typing import Any
 from binance import AsyncClient  # type: ignore[attr-defined]
 
 # App
-from app.config import settings
+from app.config import get_cache_settings
 
 
 @lru_cache
@@ -15,9 +16,9 @@ def binance_client_cache() -> Any:
     """Get binance client cache"""
 
     return BinanceClient(
-        binance_api_key=settings.BINANCE_API_KEY,
-        binance_api_secret=settings.BINANCE_API_SECRET,
-        requests_params={"timeout": settings.BINANCE_REQUEST_TIMEOUT},
+        binance_api_key=get_cache_settings().BINANCE_API_KEY,
+        binance_api_secret=get_cache_settings().BINANCE_API_SECRET,
+        requests_params={"timeout": get_cache_settings().BINANCE_REQUEST_TIMEOUT},
     )
 
 
@@ -58,7 +59,7 @@ class BinanceClient:
 
 
 binance_client = BinanceClient(
-    binance_api_key=settings.BINANCE_API_KEY,
-    binance_api_secret=settings.BINANCE_API_SECRET,
-    requests_params={"timeout": settings.BINANCE_REQUEST_TIMEOUT},
+    binance_api_key=get_cache_settings().BINANCE_API_KEY,
+    binance_api_secret=get_cache_settings().BINANCE_API_SECRET,
+    requests_params={"timeout": get_cache_settings().BINANCE_REQUEST_TIMEOUT},
 )

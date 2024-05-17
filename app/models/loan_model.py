@@ -1,11 +1,12 @@
 """Loan models module"""
+
 # Third-Party
 from sqlalchemy import Column, DateTime, Integer, String, func, FLOAT, BIGINT
 from sqlalchemy.orm import class_mapper
 
 # App
-from config import Base
-from models import LoanStatusEnum
+from app.config import Base
+from app.schemas import LoanStatusEnum
 
 
 class Loan(Base):

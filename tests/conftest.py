@@ -1,4 +1,5 @@
 """Test setup"""
+
 # Built-In
 from os import environ
 

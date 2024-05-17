@@ -1,4 +1,5 @@
 """Setting service module"""
+
 # Built-In
 from datetime import datetime
 from typing import Dict, List, Union, Any
@@ -9,15 +10,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
 from app.models import Setting
-from app.schemas import SettingSchema, SettingRequest, SettingStatusEnum, CriptographyModeEnum
-from app.service.setting.utils import check_setting_fields
+from app.schemas import SettingResponse, SettingRequest, SettingStatusEnum, CriptographyModeEnum
+from app.service import key_cryptography_proccess
 from app.data_access import (
     get_setting_query,
     update_add_obj_query,
     update_setting_query,
     delete_obj_query,
 )
-from app.service.utilities.utils import key_cryptography_proccess
 
 
 class SettingsService:
@@ -39,14 +39,14 @@ class SettingsService:
             status = SettingStatusEnum.FULL
         return {"status": status, "missing_fields": missing_fields}
 
-    async def get_setting(self, _id: int | None = None) -> SettingSchema | None:
+    async def get_setting(self, _id: int | None = None) -> SettingResponse | None:
         """Get setting"""
 
         if not (setting_db := await get_setting_query(_id=_id, db_session=self.db_session)):
             raise HTTPException(404, f"Setting id: [{_id}], not found")
 
         return key_cryptography_proccess(
-            setting_obj=SettingSchema(**setting_db.dict()),
+            setting_obj=SettingResponse(**setting_db.dict()),
             mode=CriptographyModeEnum.DECRYPT,
         )
 
@@ -61,12 +61,8 @@ class SettingsService:
     async def add_setting(self, setting_req: SettingRequest) -> Setting | None:
         """Add setting"""
 
-        setting_req = key_cryptography_proccess(
-            setting_obj=setting_req, mode=CriptographyModeEnum.ENCRYPT
-        )
-        return await update_add_obj_query(
-            item=Setting(**setting_req.dict()), db_session=self.db_session
-        )
+        setting_req = key_cryptography_proccess(setting_obj=setting_req, mode=CriptographyModeEnum.ENCRYPT)
+        return await update_add_obj_query(item=Setting(**setting_req.dict()), db_session=self.db_session)
 
     async def update_setting(
         self,
@@ -77,16 +73,12 @@ class SettingsService:
 
         setting_dto = await SettingsService(db_session=self.db_session).get_setting(_id=_id)
 
-        filters = {
-            key: value for key, value in setting_req.model_dump().items() if value is not None
-        }
+        filters = {key: value for key, value in setting_req.model_dump().items() if value is not None}
         for key in filters:
             setattr(setting_dto, key, filters.get(key))
         setting_dto.updated_at = datetime.utcnow()
 
-        setting_dto = key_cryptography_proccess(
-            setting_obj=setting_dto, mode=CriptographyModeEnum.ENCRYPT
-        )
+        setting_dto = key_cryptography_proccess(setting_obj=setting_dto, mode=CriptographyModeEnum.ENCRYPT)
         return await update_setting_query(
             _id=setting_dto.id,
             setting=Setting(**setting_dto.dict()),

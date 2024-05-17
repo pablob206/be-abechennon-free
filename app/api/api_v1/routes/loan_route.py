@@ -1,11 +1,11 @@
-"""Loan routes module"""
+"""Loan routes module v1"""
+
 # Third-Party
 from fastapi import APIRouter, status
 
 # App
-from app.service.loan import LoanService
-from app.models import Loan
-from app.schemas import LoanSchema, LoanOperationTypeEnum
+from app.service import LoanService
+from app.schemas import LoanRequest, LoanOperationTypeEnum
 from app.api import DBSessionDep
 
 router = APIRouter()
@@ -14,11 +14,10 @@ router = APIRouter()
 @router.post(
     path="/loan/create",
     summary="Create Margin Loan",
-    response_model=Loan,
     response_model_exclude={"id"},
     status_code=status.HTTP_201_CREATED,
 )
-async def create_loan(loan_request: LoanSchema, db_session: DBSessionDep):
+async def create_loan(loan_request: LoanRequest, db_session: DBSessionDep):
     """
     Create margin loan (only available for MARGIN trading type) \n
     - **:Request body:** \n
@@ -51,11 +50,10 @@ async def create_loan(loan_request: LoanSchema, db_session: DBSessionDep):
 @router.post(
     path="/loan/repay",
     summary="Repay Margin Loan",
-    response_model=Loan,
     response_model_exclude={"id"},
     status_code=status.HTTP_201_CREATED,
 )
-async def repay_loan(loan_request: LoanSchema, db_session: DBSessionDep):
+async def repay_loan(loan_request: LoanRequest, db_session: DBSessionDep):
     """
     Repay margin loan (only available for MARGIN trading type) \n
     - **:Request body:** \n

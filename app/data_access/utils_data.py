@@ -1,4 +1,5 @@
 """Data access utilities module"""
+
 # Built-In
 from typing import TypeVar, Dict, List, Union
 
@@ -50,9 +51,7 @@ async def insert_document(
     return {"status": "success", "document": document}
 
 
-async def get_document(
-    document: DynamicDocument, _id: str | None = None, name: str | None = None
-) -> Strategies:
+async def get_document(document: DynamicDocument, _id: str | None = None, name: str | None = None) -> Strategies:
     """
     Get document by '_id' or 'name' or last record (Mongo DB)
     """
@@ -72,9 +71,7 @@ async def get_all_document(document: DynamicDocument) -> List[Strategies]:
     return document.objects().all()
 
 
-async def delete_document(
-    document: DynamicDocument, _id: str | None = None, name: str | None = None
-) -> Dict[str, str]:
+async def delete_document(document: DynamicDocument, _id: str | None = None, name: str | None = None) -> Dict[str, str]:
     """
     Delete document permanently by '_id' or 'name' (Mongo DB)
     """

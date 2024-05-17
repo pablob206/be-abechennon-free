@@ -1,4 +1,5 @@
 """Binance socket engine module"""
+
 # Built-In
 from datetime import datetime
 import asyncio
@@ -10,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
 from app.models import MdLogs, Setting
-from app.schemas import OrderSchema, AppStatusEnum, SettingStatusEnum, SocketTypeEnum
+from app.schemas import OrderRequest, AppStatusEnum, SettingStatusEnum, SocketTypeEnum
 from app.config import settings, async_session
 from app.service.binance.binance_service import (
     build_stream_name,
@@ -19,9 +20,9 @@ from app.service.binance.binance_service import (
     update_klines,
     binance_client,
 )
-from app.service.setting import SettingsService
-from app.service.strategy import strategy_temp
-from app.service.order_management import OrderManagementService
+from app.service.setting_service import SettingsService
+from app.service.strategy_service import StrategyServices
+from app.service.order_management_service import OrderManagementService
 from app.data_access import clear_cache, get_setting_query
 
 logger = logging.getLogger("WebSocketClient")
@@ -68,9 +69,7 @@ async def init_binance_websocket_engine(
 
     market_data_start = False
     while market_data_start is False:
-        market_data_status = (
-            await binance_client().get_system_status()
-        )  # {'status': 0, 'msg': 'normal'}
+        market_data_status = await binance_client().get_system_status()  # {'status': 0, 'msg': 'normal'}
         setting_status = await SettingsService().get_setting_status()
         if (
             settings.APP_STATUS != AppStatusEnum.RUNNING
@@ -93,18 +92,16 @@ async def init_binance_websocket_engine(
     pairs_availables: dict = await get_pairs_availables(
         currency_base=setting_db.currency_base, trading_type=setting_db.trading_type
     )
-    pair_list = [  # pylint: disable=unnecessary-comprehension
-        pair for pair in pairs_availables
-    ]
+    pair_list = [pair for pair in pairs_availables]  # pylint: disable=unnecessary-comprehension
     kline_stream: list = build_stream_name(
         pair_list=pair_list,
         socket_name=settings.BINANCE_SOCKET_NAME[0],
         interval_list=settings.BINANCE_SOCKET_INTERVAL,
     )
 
-    multiplex_socket = BinanceSocketManager(
-        client=binance_client(), user_timeout=60
-    ).multiplex_socket(streams=kline_stream)
+    multiplex_socket = BinanceSocketManager(client=binance_client(), user_timeout=60).multiplex_socket(
+        streams=kline_stream
+    )
 
     if cache_clear:
         for interval in settings.BINANCE_SOCKET_INTERVAL:
@@ -119,13 +116,9 @@ async def init_binance_websocket_engine(
             while True:
                 if not (ml_resp := await multiplex_listener.recv()):
                     continue
-                if (
-                    ml_resp.get("e") == "error"
-                ):  # {'e': 'error', 'm': 'Queue overflow. Message not filled'}
+                if ml_resp.get("e") == "error":  # {'e': 'error', 'm': 'Queue overflow. Message not filled'}
                     await binance_client().close_connection()
-                    await init_binance_websocket_engine(
-                        db_session=db_session, cache_clear=False
-                    )
+                    await init_binance_websocket_engine(db_session=db_session, cache_clear=False)
                 if not (ml_data := ml_resp.get("data")):
                     continue
                 if "k" in ml_data:
@@ -135,12 +128,10 @@ async def init_binance_websocket_engine(
                     update_detail_account = False
                     if setting_db.is_real_time:  # real time
                         for pair in setting_db.pairs:
-                            signal = await strategy_temp(
-                                pair=pair, setting_db=setting_db
-                            )
+                            signal = await StrategyServices.strategy_temp(pair=pair, setting_db=setting_db)
                             if signal and setting_db.bot_status:
                                 await OrderManagementService(db_session=db_session).create_order(
-                                    order=OrderSchema(
+                                    order=OrderRequest(
                                         pair=pair,
                                         trading_type=setting_db.trading_type,
                                         side=signal,
@@ -149,17 +140,11 @@ async def init_binance_websocket_engine(
                                     ),
                                 )
                                 update_detail_account = True
-                    elif (
-                        not setting_db.is_real_time and tick["x"]
-                    ):  # only kline is finished
+                    elif not setting_db.is_real_time and tick["x"]:  # only kline is finished
                         for pair in setting_db.pairs:
-                            signal = await strategy_temp(
-                                pair=pair, setting_db=setting_db
-                            )
+                            signal = await StrategyServices.strategy_temp(pair=pair, setting_db=setting_db)
                             if signal and setting_db.bot_status:
-                                await OrderManagementService(db_session=db_session).create_order(
-                                    order=OrderSchema()
-                                )
+                                await OrderManagementService(db_session=db_session).create_order(order=OrderRequest())
                             update_detail_account = True
 
                     if update_detail_account:
@@ -170,11 +155,7 @@ async def init_binance_websocket_engine(
                         log = MdLogs(
                             eventType=event_type,
                             eventTime=event_time,
-                            intervalKline=(
-                                tick["i"]
-                                if event_type == SocketTypeEnum.KLINE
-                                else None
-                            ),
+                            intervalKline=(tick["i"] if event_type == SocketTypeEnum.KLINE else None),
                             createdAt=datetime.utcnow(),
                             symbol=symbol,
                             tick=tick,

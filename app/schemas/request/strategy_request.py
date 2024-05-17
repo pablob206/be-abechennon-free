@@ -1,4 +1,5 @@
-"""Strategy schemas module"""
+"""Strategy request schemas module"""
+
 # Built-In
 from typing import Dict, List
 
@@ -75,9 +76,7 @@ class StrategyData(BaseModel):
     """Strategy data base schema"""
 
     name: str = Field(None, title="Indicator Name")
-    signal_type: SideEnum = Field(
-        SideEnum.BUY, title="Signal Type", description="BUY or SELL"
-    )
+    signal_type: SideEnum = Field(SideEnum.BUY, title="Signal Type", description="BUY or SELL")
     chartperiod: ChartPeriodSecEnum = Field(
         ChartPeriodSecEnum.FIFTEEN_MIN,
         title="Chart Period",

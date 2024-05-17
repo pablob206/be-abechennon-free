@@ -1,4 +1,5 @@
 """Bot functions module"""
+
 # Built-In
 from typing import List, Dict, Any
 from collections import defaultdict
@@ -30,16 +31,12 @@ def build_stream_name(
     stream_name_list = [f"{pair.lower()}@{socket_name}" for pair in pair_list]
     if interval_list:
         stream_name_list = [
-            f"{stream_name}_{interval}"
-            for stream_name in stream_name_list
-            for interval in interval_list
+            f"{stream_name}_{interval}" for stream_name in stream_name_list for interval in interval_list
         ]
     return stream_name_list
 
 
-async def get_assets_details(
-    db_session: AsyncSession, wallet: WalletTypeEnum
-) -> Dict[str, Any]:
+async def get_assets_details(db_session: AsyncSession, wallet: WalletTypeEnum) -> Dict[str, Any]:
     """
     Get assets details
     """
@@ -63,12 +60,8 @@ async def get_assets_details(
             if user_assets["asset"] == pair.replace(setting_db.currency_base, ""):
                 price = 0
                 if pair != "USDT":
-                    if not (
-                        ticker := await binance_client().get_symbol_ticker(symbol=pair)
-                    ):
-                        raise HTTPException(
-                            status_code=404, detail=f"Ticker [{pair}] not found"
-                        )
+                    if not (ticker := await binance_client().get_symbol_ticker(symbol=pair)):
+                        raise HTTPException(status_code=404, detail=f"Ticker [{pair}] not found")
 
                     price = ticker["price"]
                 current_data["asset"] = user_assets["asset"]
@@ -78,9 +71,7 @@ async def get_assets_details(
                 current_data["interest"] = float(user_assets["interest"])
                 current_data["netAsset"] = float(user_assets["netAsset"])
                 current_data["free_usdt"] = float(user_assets["free"]) * float(price)
-                current_data["borrowed_usdt"] = float(user_assets["borrowed"]) * float(
-                    price
-                )
+                current_data["borrowed_usdt"] = float(user_assets["borrowed"]) * float(price)
 
                 total_margin_account[pair] = current_data
     return total_margin_account
@@ -104,14 +95,10 @@ async def get_pairs_availables(
                 and item["quote"] == currency_base.upper()
             }
             if not pairs_availables:
-                raise HTTPException(
-                    status_code=404, detail=f"[{currency_base}] pairs not found"
-                )
+                raise HTTPException(status_code=404, detail=f"[{currency_base}] pairs not found")
             return pairs_availables
         raise HTTPException(status_code=404, detail=f"[{trading_type}] pairs not found")
-    raise HTTPException(
-        status_code=400, detail=f"Only support [{TradingTypeEnum.MARGIN}] trading type"
-    )
+    raise HTTPException(status_code=400, detail=f"Only support [{TradingTypeEnum.MARGIN}] trading type")
 
 
 async def set_klines(
@@ -198,11 +185,7 @@ def update_klines(pair: str, tick: dict) -> None:
     """
 
     interval = tick["i"]
-    if not (
-        tick_cache_bytes := get_klines_cache(
-            name=f"{pair}_{interval}", db_redis=settings.DB_REDIS_KLINES
-        )
-    ):
+    if not (tick_cache_bytes := get_klines_cache(name=f"{pair}_{interval}", db_redis=settings.DB_REDIS_KLINES)):
         return
     tick_cache = {}
     for key, value in tick_cache_bytes.items():
@@ -215,9 +198,7 @@ def update_klines(pair: str, tick: dict) -> None:
             value.pop()
             value.append(float(tick[key]))
         tick_cache[key] = value
-    temp_dict_bytes: dict = {
-        key: orjson.dumps(value) for key, value in tick_cache.items()
-    }
+    temp_dict_bytes: dict = {key: orjson.dumps(value) for key, value in tick_cache.items()}
     return set_klines_cache(
         name=f"{pair}_{interval}",
         mapping=temp_dict_bytes,

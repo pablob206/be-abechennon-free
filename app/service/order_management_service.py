@@ -1,4 +1,5 @@
 """Order management service module"""
+
 # Third-Party
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
@@ -7,7 +8,7 @@ from fastapi import HTTPException
 from app.config import logger
 from app.service.binance import binance_client
 from app.models import Order
-from app.schemas import OrderSchema, TradingTypeEnum
+from app.schemas import OrderRequest, TradingTypeEnum
 from app.data_access import (
     update_add_obj_query,
     get_orders_query,
@@ -22,7 +23,7 @@ class OrderManagementService:
 
         self.db_session = db_session
 
-    async def create_order(self, order: OrderSchema) -> Order:
+    async def create_order(self, order: OrderRequest) -> Order:
         """
         Create order (Only MARGIN trading supported)
         order_resp = {
@@ -79,9 +80,7 @@ class OrderManagementService:
             )
         except Exception as exc:
             logger.error("Failed to create order")
-            raise HTTPException(
-                status_code=400, detail=f"Failed to create [{order.trading_type}] order"
-            ) from exc
+            raise HTTPException(status_code=400, detail=f"Failed to create [{order.trading_type}] order") from exc
 
         order_db.order_id = order_resp.get("orderId")
         order_db.client_order_id = order_resp.get("clientOrderId")

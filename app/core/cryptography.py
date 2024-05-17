@@ -1,10 +1,11 @@
 """Cryptography layer module"""
+
 # Third-Party
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
 # App
-from config import get_cache_settings
+from app.config import get_cache_settings
 
 
 class AesCipher:
@@ -15,9 +16,7 @@ class AesCipher:
 
         self.key_aes: bytes = key_aes.encode("utf-8")
         self._iv = self.key_aes[:16]
-        self.cipher = Cipher(
-            algorithms.AES(self.key_aes), modes.CBC(self._iv), backend=default_backend()
-        )
+        self.cipher = Cipher(algorithms.AES(self.key_aes), modes.CBC(self._iv), backend=default_backend())
 
     def encrypt(self, text: str) -> str:
         """AES encrypt text"""

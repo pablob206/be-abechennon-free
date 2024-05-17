@@ -1,4 +1,5 @@
 """Initialize models layer modules"""
+
 # App
 from .setting_model import *
 from .strategy_model import *

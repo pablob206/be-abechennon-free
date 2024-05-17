@@ -1,11 +1,11 @@
 """Order models module"""
+
 # Third-Party
 from sqlalchemy import Boolean, Column, DateTime, Integer, String, func, BIGINT, Float, JSON
 from sqlalchemy.orm import class_mapper
 
 # App
-from app.schemas import OrdStatusEnum
-from config import Base
+from app.config import Base
 
 
 class Order(Base):
@@ -18,19 +18,19 @@ class Order(Base):
     pair = Column(String(55), nullable=False)
     trading_type = Column(String(55), nullable=False)
     order_id = Column(Integer, default=None, nullable=True)
-    client_order_id = Column(String(155),default=None, nullable=True)
+    client_order_id = Column(String(155), default=None, nullable=True)
     transact_time = Column(BIGINT, nullable=True)
     price = Column(Float, default=None, nullable=True)
     limit_price = Column(Float, default=None, nullable=True)
     orig_qty = Column(Float, nullable=False)
     executed_qty = Column(Float, default=None, nullable=True)
     cummulative_quote_qty = Column(Float, default=None, nullable=True)
-    status: OrdStatusEnum = Column(String, nullable=False)
-    time_in_force = Column(String, default=None, nullable=True)
-    ord_type = Column(String, nullable=False)
-    side = Column(String, nullable=False)
+    status = Column(String(55), nullable=False)
+    time_in_force = Column(String(100), default=None, nullable=True)
+    ord_type = Column(String(55), nullable=False)
+    side = Column(String(15), nullable=False)
     margin_buy_borrow_amount = Column(Float, default=None, nullable=True)
-    margin_buy_borrow_asset = Column(String, default=None, nullable=True)
+    margin_buy_borrow_asset = Column(String(100), default=None, nullable=True)
     is_isolated = Column(Boolean, default=False, nullable=False)
     fills = Column(JSON, default=None, nullable=True)
     updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())

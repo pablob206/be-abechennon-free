@@ -1,6 +1,7 @@
 """Initialize core layer modules"""
+
 # App
-from config import get_cache_settings
+from app.config import get_cache_settings
 from .cryptography import AesCipher
 from .sql_dao import SqlDao
 

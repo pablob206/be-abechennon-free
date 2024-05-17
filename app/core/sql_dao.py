@@ -4,7 +4,7 @@
 from typing import Any, Dict, List, Literal, TypeVar
 
 # App
-from config import Base
+from app.config import Base
 
 # Third-Party
 from sqlalchemy import select

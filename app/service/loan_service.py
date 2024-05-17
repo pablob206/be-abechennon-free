@@ -1,12 +1,13 @@
 """Loan service module"""
+
 # Third-Party
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 
 # App
-from app.service.binance import binance_client
+from app.service import binance_client
 from app.models import Loan
-from app.schemas import LoanSchema, TradingTypeEnum, LoanOperationTypeEnum, LoanStatusEnum
+from app.schemas import LoanRequest, TradingTypeEnum, LoanOperationTypeEnum, LoanStatusEnum
 from app.config import logger
 from app.data_access import update_add_obj_query
 
@@ -21,7 +22,7 @@ class LoanService:
 
     async def loan_operations(
         self,
-        loan_request: LoanSchema,
+        loan_request: LoanRequest,
         loan_operation: LoanOperationTypeEnum,
     ) -> Loan:
         """

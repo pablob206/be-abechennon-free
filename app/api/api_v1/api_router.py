@@ -1,4 +1,5 @@
 """Api routes"""
+
 # Third-Party
 from fastapi import APIRouter
 
