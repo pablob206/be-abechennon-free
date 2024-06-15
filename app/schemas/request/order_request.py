@@ -4,12 +4,7 @@
 from pydantic import BaseModel
 
 # App
-from app.schemas import (
-    TradingTypeEnum,
-    OrdTypeEnum,
-    SideEnum,
-    TimeInForceEnum,
-)
+from app.schemas import OrdTypeEnum, SideEnum, TimeInForceEnum, TradingTypeEnum
 
 
 class OrderRequest(BaseModel):

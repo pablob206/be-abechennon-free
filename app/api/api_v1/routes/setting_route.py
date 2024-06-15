@@ -1,15 +1,16 @@
 """Setting routes module v1"""
 
 # Built-In
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Union
 
 # Third-Party
 from fastapi import APIRouter, status
 
+from app.api.deps import DBSessionDep
+from app.schemas import SettingRequest, SettingResponse
+
 # App
 from app.service import SettingsService
-from app.schemas import SettingResponse, SettingRequest
-from app.api import DBSessionDep
 
 router = APIRouter()
 
@@ -20,7 +21,7 @@ router = APIRouter()
     response_model=Dict[str, Union[str, List[str]]],
     status_code=status.HTTP_200_OK,
 )
-async def _get_setting_status(db_session: DBSessionDep, _id: int | None = None):
+async def get_setting_status(db_session: DBSessionDep, _id: int | None = None) -> dict:
     """
     Get setting status by _id, or last setting (_id = None)
     - **:param _id:** (int, Optional), setting id. I.e: 1
@@ -42,7 +43,7 @@ async def _get_setting_status(db_session: DBSessionDep, _id: int | None = None):
     response_model=SettingResponse,
     status_code=status.HTTP_200_OK,
 )
-async def _get_setting(db_session: DBSessionDep, _id: int | None = None):
+async def get_setting(db_session: DBSessionDep, _id: int | None = None) -> Any:
     """
     Get setting by _id, or last setting (_id = None)
     - **:param _id:** (int, Optional), setting id. I.e: 1
@@ -69,7 +70,7 @@ async def _get_setting(db_session: DBSessionDep, _id: int | None = None):
     response_model_exclude_none=True,
     status_code=status.HTTP_201_CREATED,
 )
-async def _add_setting(setting_req: SettingRequest, db_session: DBSessionDep):
+async def add_setting(setting_req: SettingRequest, db_session: DBSessionDep) -> dict:
     """
     Add setting
     - **:Request body:** \n
@@ -108,11 +109,11 @@ async def _add_setting(setting_req: SettingRequest, db_session: DBSessionDep):
     response_model_exclude_none=True,
     status_code=status.HTTP_201_CREATED,
 )
-async def _update_setting(
+async def update_setting(
     setting_req: SettingRequest,
     db_session: DBSessionDep,
     _id: int | None = None,
-):
+) -> dict:
     """
     Update setting by id, or last setting (_id = None)
     - **:param _id:** (int, Optional), setting id. I.e: 1
@@ -139,7 +140,7 @@ async def _update_setting(
 
 
 @router.delete(path="/setting", summary="Delete setting", status_code=status.HTTP_200_OK)
-async def _delete_setting(_id: int, db_session: DBSessionDep):
+async def delete_setting(_id: int, db_session: DBSessionDep) -> dict:
     """
     Delete setting by _id
     - **:param _id:** int, setting id. I.e: 1

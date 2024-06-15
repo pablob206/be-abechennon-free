@@ -3,13 +3,13 @@
 # Built-In
 from typing import Any, Dict, List, Literal, TypeVar
 
-# App
-from app.config import Base
-
 # Third-Party
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import lazyload
+
+# App
+from app.config import Base
 
 
 class SqlDao:

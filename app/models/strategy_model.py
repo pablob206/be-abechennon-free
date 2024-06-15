@@ -4,13 +4,7 @@
 from datetime import datetime
 
 # Third-Party
-from mongoengine import (
-    DynamicDocument,
-    StringField,
-    DictField,
-    ListField,
-    DateTimeField,
-)
+from mongoengine import DateTimeField, DictField, DynamicDocument, ListField, StringField
 
 
 class Strategies(DynamicDocument):

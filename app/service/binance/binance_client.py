@@ -5,7 +5,7 @@ from functools import lru_cache
 from typing import Any
 
 # Third-party
-from binance import AsyncClient  # type: ignore[attr-defined]
+from binance import AsyncClient
 
 # App
 from app.config import get_cache_settings
@@ -25,7 +25,7 @@ def binance_client_cache() -> Any:
 class BinanceClient:
     """Binance client"""
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None:  # type: ignore
         """Constructor"""
 
         self.options: dict = kwargs

@@ -3,14 +3,14 @@
 # Third-Party
 from fastapi import APIRouter
 
+import app.api.api_v1.routes.bot_route as bot
+import app.api.api_v1.routes.loan_route as loan
+import app.api.api_v1.routes.order_management_route as order_management
+
 # App
 import app.api.api_v1.routes.root_route as root
 import app.api.api_v1.routes.setting_route as setting
-import app.api.api_v1.routes.bot_route as bot
 import app.api.api_v1.routes.strategy_route as strategy
-import app.api.api_v1.routes.order_management_route as order_management
-import app.api.api_v1.routes.loan_route as loan
-
 
 api_router = APIRouter()
 

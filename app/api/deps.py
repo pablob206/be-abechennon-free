@@ -8,7 +8,7 @@ from fastapi import Depends, Header
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # App
-from app.config import get_db_session, get_cache_settings
+from app.config import get_cache_settings, get_db_session
 
 
 def verify_secret_key_dep(secret_key: Annotated[str, Header()]) -> None:

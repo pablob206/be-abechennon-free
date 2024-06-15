@@ -6,12 +6,11 @@ from logging.config import fileConfig
 
 # Third-Party
 from alembic import context
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import engine_from_config, pool
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 # App
-from app.config import sql_url, Base
+from app.config import Base, sql_url
 from app.models import *  # noqa
 
 # import models to auto gen

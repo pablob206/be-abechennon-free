@@ -1,15 +1,9 @@
 """Setting models module"""
 
 # Third-Party
-from sqlalchemy import Column, DateTime, Integer, String, func, Float, JSON, Boolean
+from mongoengine import DateTimeField, DictField, DynamicDocument, IntField, StringField
+from sqlalchemy import JSON, Boolean, Column, DateTime, Float, Integer, String, func
 from sqlalchemy.orm import class_mapper
-from mongoengine import (
-    StringField,
-    DynamicDocument,
-    IntField,
-    DictField,
-    DateTimeField,
-)
 
 # App
 from app.config import Base

@@ -7,9 +7,8 @@ from typing import Dict
 from fastapi import APIRouter, status
 
 # App
-from app.config import get_cache_settings, disconnect
+from app.config import async_session, disconnect, get_cache_settings
 from app.service import binance_client
-from app.config import async_session
 
 router = APIRouter()
 
@@ -32,7 +31,7 @@ async def shutdown_event() -> None:
 
     await binance_client.stop()
     disconnect()
-    async with async_session.begin() as db_session:
+    async with async_session.begin() as db_session:  # type: ignore
         await db_session.close()
     print("Bye! \nShutdown, Abechennon-Free")
 

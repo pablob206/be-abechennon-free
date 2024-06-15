@@ -1,12 +1,13 @@
 """Data access utilities module"""
 
 # Built-In
-from typing import TypeVar, Dict, List, Union
+from typing import Dict, List, TypeVar, Union
+
+from mongoengine import DynamicDocument
 
 # Third-Party
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
-from mongoengine import DynamicDocument
 
 # App
 from app.models import Strategies

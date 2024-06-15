@@ -6,9 +6,10 @@ import logging
 # Third-Party
 import sqlalchemy
 
+from .db.mongo import *
+
 # App
 from .db.mysql import *
-from .db.mongo import *
 from .db.redis import *
 from .settings import *
 

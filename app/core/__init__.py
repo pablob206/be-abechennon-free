@@ -2,6 +2,7 @@
 
 # App
 from app.config import get_cache_settings
+
 from .cryptography import AesCipher
 from .sql_dao import SqlDao
 

@@ -3,10 +3,11 @@
 # Third-Party
 from fastapi import APIRouter, status
 
+from app.api.deps import DBSessionDep
+from app.schemas import OrderRequest
+
 # App
 from app.service import OrderManagementService
-from app.schemas import OrderRequest
-from app.api import DBSessionDep
 
 router = APIRouter()
 
@@ -16,7 +17,7 @@ router = APIRouter()
     summary="Create new order",
     status_code=status.HTTP_201_CREATED,
 )
-async def create_new_order(order: OrderRequest, db_session: DBSessionDep):
+async def create_new_order(order: OrderRequest, db_session: DBSessionDep) -> dict:
     """
     Create new order (only available for MARGIN trading type)
     - **:Request body:** \n
@@ -77,7 +78,7 @@ async def create_new_order(order: OrderRequest, db_session: DBSessionDep):
     summary="Get orders",
     status_code=status.HTTP_200_OK,
 )
-async def get_orders(db_session: DBSessionDep, _id: int | None = None):
+async def get_orders(db_session: DBSessionDep, _id: int | None = None) -> list:
     """
     Get orders by _id, or all orders (_id = None)
     - **:param _id:** (int, Optional), order id. I.e: 7

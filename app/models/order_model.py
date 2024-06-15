@@ -1,7 +1,7 @@
 """Order models module"""
 
 # Third-Party
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, func, BIGINT, Float, JSON
+from sqlalchemy import BIGINT, JSON, Boolean, Column, DateTime, Float, Integer, String, func
 from sqlalchemy.orm import class_mapper
 
 # App

@@ -7,7 +7,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 # App
-from app.schemas import BotStatusEnum, TradingTypeEnum, OrdTypeEnum
+from app.schemas import BotStatusEnum, OrdTypeEnum, TradingTypeEnum
 
 
 class SettingBase(BaseModel):

@@ -7,7 +7,7 @@ from typing import Dict, List
 from pydantic import BaseModel, Field
 
 # App
-from app.schemas import SideEnum, ChartPeriodSecEnum
+from app.schemas import ChartPeriodSecEnum, SideEnum
 
 
 class CandleValue(BaseModel):
