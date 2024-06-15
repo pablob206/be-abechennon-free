@@ -3,21 +3,19 @@
 # Third-Party
 from fastapi import APIRouter
 
-# App
-from app.service.binance import (
-    get_pairs_availables,
-    get_assets_details,
-)
-from app.service import SettingsService, StrategyServices
-from app.schemas import TradingTypeEnum, WalletTypeEnum
 from app.api.deps import DBSessionDep
 from app.data_access import get_setting_query
+from app.schemas import SideEnum, TradingTypeEnum, WalletTypeEnum
+from app.service import SettingsService, StrategyServices
+
+# App
+from app.service.binance import get_assets_details, get_pairs_availables
 
 router = APIRouter()
 
 
 @router.get(path="/bot/feat-test")
-async def feat_test(db_session: DBSessionDep):
+async def feat_test(db_session: DBSessionDep) -> SideEnum:
     """
     Endpoint for feature testing
     """
@@ -27,7 +25,7 @@ async def feat_test(db_session: DBSessionDep):
 
 
 @router.get(path="/bot/status")
-async def get_bot_status(db_session: DBSessionDep):
+async def get_bot_status(db_session: DBSessionDep) -> dict:
     """
     Get bot status
     - **:return:** dict, bot status. I.e: \n
@@ -40,7 +38,7 @@ async def get_bot_status(db_session: DBSessionDep):
 
 
 @router.get(path="/{wallet}/assets")
-async def get_assets_details(db_session: DBSessionDep, wallet: WalletTypeEnum = WalletTypeEnum.MARGIN):
+async def get_assets_details_data(db_session: DBSessionDep, wallet: WalletTypeEnum = WalletTypeEnum.MARGIN) -> dict:
     """
     Get assets details by wallet
     - **:param wallet:** WalletTypeEnum (Default WalletTypeEnum.MARGIN),
@@ -75,10 +73,10 @@ async def get_assets_details(db_session: DBSessionDep, wallet: WalletTypeEnum = 
 
 
 @router.get(path="/{trade_type}/pairs-availables")
-async def get_pairs_availables(
+async def get_pairs_availables_data(
     currency_base: str | None = "USDT",
     trading_type: TradingTypeEnum = TradingTypeEnum.MARGIN,
-):
+) -> dict:
     """
     Get pairs availables by currency-base and trading-type, format: 'pair'-'currency'.
     Current length: 232.

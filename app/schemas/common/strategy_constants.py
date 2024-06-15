@@ -1,7 +1,7 @@
 """Module to store strategy constants used in the project"""
 
 # Built-In
-from enum import StrEnum, IntEnum
+from enum import IntEnum, StrEnum
 
 
 class OhlcvValueEnum(StrEnum):

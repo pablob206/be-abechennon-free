@@ -1,3 +1,4 @@
+files: app/
 default_language_version:
   python: python3.12
 repos:
@@ -55,4 +56,17 @@ repos:
           "--implicit-reexport",
           "--explicit-package-bases",
           "--namespace-packages",
+        ]
+        additional_dependencies: [
+          pydantic,
+          sqlalchemy-stubs~=0.4,
+          sqlalchemy2-stubs~=0.0.2a38,
+          types-pytz~=2024.1.0.20240203,
+          types-redis~=4.6.0.20240218,
+          types-requests~=2.31.0.20240218,
+          types-toml~=0.10.8.7,
+          types-urllib3~=1.26.25.14,
+          typing-inspect~=0.9.0,
+          typing_extensions~=4.10.0,
+          types-orjson~=3.6.2,
         ]

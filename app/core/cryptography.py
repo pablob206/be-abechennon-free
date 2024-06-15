@@ -1,8 +1,8 @@
 """Cryptography layer module"""
 
 # Third-Party
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 # App
 from app.config import get_cache_settings
@@ -11,7 +11,7 @@ from app.config import get_cache_settings
 class AesCipher:
     """AES Cipher"""
 
-    def __init__(self, key_aes: str | None = get_cache_settings().KEY_AES):
+    def __init__(self, key_aes: str | None = get_cache_settings().KEY_AES) -> None:
         """Init"""
 
         self.key_aes: bytes = key_aes.encode("utf-8")
@@ -41,13 +41,13 @@ class AesCipher:
         return plain_text.decode("utf-8").rstrip("\0")
 
     @staticmethod
-    def to_hex(data):
+    def to_hex(data: bytes) -> str:
         """Convert bytes to hex string"""
 
         return data.hex()
 
     @staticmethod
-    def from_hex(hex_string):
+    def from_hex(hex_string: str) -> bytes:
         """Convert hex string to bytes"""
 
         return bytes.fromhex(hex_string)

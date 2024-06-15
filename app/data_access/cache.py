@@ -26,7 +26,7 @@ def set_klines_cache(
     """
 
     redis_client.select(index=db_redis)
-    return redis_client.hmset(name=name, mapping=mapping)
+    return redis_client.hmset(name=name, mapping=mapping)  # type: ignore
 
 
 def get_klines_cache(

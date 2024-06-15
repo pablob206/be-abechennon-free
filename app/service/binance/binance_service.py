@@ -1,8 +1,9 @@
 """Bot functions module"""
 
 # Built-In
-from typing import List, Dict, Any
 from collections import defaultdict
+from typing import Any, Dict, List
+
 import orjson
 
 # Third-Party
@@ -11,9 +12,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
 from app.config import settings
+from app.data_access import get_klines_cache, get_setting_query, set_klines_cache
 from app.schemas import TradingTypeEnum, WalletTypeEnum
 from app.service.binance import binance_client
-from app.data_access import set_klines_cache, get_klines_cache, get_setting_query
 
 
 def build_stream_name(
@@ -50,7 +51,7 @@ async def get_assets_details(db_session: AsyncSession, wallet: WalletTypeEnum) -
     if not (setting_db := await get_setting_query(db_session=db_session)):
         raise HTTPException(status_code=404, detail="Setting not found")
 
-    if not (margin_account := await binance_client().get_margin_account()):
+    if not (margin_account := await binance_client().get_margin_account()):  # type: ignore
         raise HTTPException(status_code=404, detail="Margin account not found")
 
     total_margin_account = {}
@@ -60,7 +61,7 @@ async def get_assets_details(db_session: AsyncSession, wallet: WalletTypeEnum) -
             if user_assets["asset"] == pair.replace(setting_db.currency_base, ""):
                 price = 0
                 if pair != "USDT":
-                    if not (ticker := await binance_client().get_symbol_ticker(symbol=pair)):
+                    if not (ticker := await binance_client().get_symbol_ticker(symbol=pair)):  # type: ignore
                         raise HTTPException(status_code=404, detail=f"Ticker [{pair}] not found")
 
                     price = ticker["price"]
@@ -85,7 +86,7 @@ async def get_pairs_availables(
     """
 
     if trading_type == TradingTypeEnum.MARGIN:
-        if margin_account := await binance_client().get_all_isolated_margin_symbols():
+        if margin_account := await binance_client().get_all_isolated_margin_symbols():  # type: ignore
             pairs_availables = {
                 item["symbol"].upper(): item["base"].upper()
                 for item in margin_account
@@ -134,7 +135,7 @@ async def set_klines(
 
     klines_proccessed_dict = {}
     for pair in pair_list:
-        historical_klines_list = await binance_client().get_historical_klines(
+        historical_klines_list = await binance_client().get_historical_klines(  # type: ignore
             symbol=pair.upper(), interval=interval, limit=limit
         )
         if is_real_time:
@@ -151,7 +152,7 @@ async def set_klines(
         temp_dict_bytes = {key: orjson.dumps(value) for key, value in temp_dict.items()}
         set_klines_cache(
             name=f"{pair}_{interval}",
-            mapping=temp_dict_bytes,
+            mapping=temp_dict_bytes,  # type: ignore
             db_redis=settings.DB_REDIS_KLINES,
         )
         klines_proccessed_dict[f"{pair}_{interval}"] = temp_dict
@@ -189,14 +190,14 @@ def update_klines(pair: str, tick: dict) -> None:
         return
     tick_cache = {}
     for key, value in tick_cache_bytes.items():
-        key = key.decode("utf-8")
+        key = key.decode("utf-8")  # type: ignore
         value = orjson.loads(value)
         if tick["x"]:
             value = value[1:]
-            value.append(float(tick[key]))
+            value.append(float(tick[key]))  # type: ignore
         else:
-            value.pop()
-            value.append(float(tick[key]))
+            value.pop()  # type: ignore
+            value.append(float(tick[key]))  # type: ignore
         tick_cache[key] = value
     temp_dict_bytes: dict = {key: orjson.dumps(value) for key, value in tick_cache.items()}
     return set_klines_cache(

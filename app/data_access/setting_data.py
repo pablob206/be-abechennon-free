@@ -1,15 +1,16 @@
 """Setting data-access layer module"""
 
 # Built-In
-from typing import Union, TypeVar
+from typing import TypeVar, Union
 
 # Third-Party
-from sqlmodel import SQLModel, select, delete, update, desc
+from sqlmodel import SQLModel, delete, desc, select, update
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.config import async_session
 
 # App
 from app.models import Setting
-from app.config import async_session
 
 TypeModel = TypeVar("TypeModel", bound=SQLModel)
 
@@ -23,7 +24,7 @@ async def get_setting_query(_id: int | None = None, db_session: AsyncSession | N
     if not _id:
         query = select(Setting).order_by(desc(Setting.id)).limit(1)
     if not db_session:
-        async with async_session.begin() as db_session:
+        async with async_session.begin() as db_session:  # type: ignore
             pass
 
     result = await db_session.execute(query)

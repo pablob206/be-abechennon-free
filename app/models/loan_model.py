@@ -1,7 +1,7 @@
 """Loan models module"""
 
 # Third-Party
-from sqlalchemy import Column, DateTime, Integer, String, func, FLOAT, BIGINT
+from sqlalchemy import BIGINT, FLOAT, Column, DateTime, Integer, String, func
 from sqlalchemy.orm import class_mapper
 
 # App

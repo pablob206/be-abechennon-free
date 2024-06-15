@@ -4,7 +4,7 @@
 import pytest
 
 # App
-from app.service.order_management import OrderManagementService
+from app.service.order_management_service import OrderManagementService
 
 
 @pytest.mark.parametrize(

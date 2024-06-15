@@ -4,8 +4,6 @@
 from functools import wraps
 from typing import Any, AsyncGenerator
 
-# App
-from app.config.settings import get_cache_settings
 from pydantic import Field
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -13,6 +11,8 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 # Third-Party
 from sqlalchemy.orm import sessionmaker
 
+# App
+from app.config.settings import get_cache_settings
 
 sql_url = (
     get_cache_settings().TYPE_MYSQL

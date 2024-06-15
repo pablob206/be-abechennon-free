@@ -1,27 +1,22 @@
 """Strategy service module"""
 
 # Built-In
-from typing import Any, List, Dict, Union
+from typing import Any, Dict, List, Union
+
+import numpy as np
+import orjson
+import talib as ta
 
 # Third-Party
 from fastapi import HTTPException
-from mongoengine import DoesNotExist
-from mongoengine import DynamicDocument
-import numpy as np
-import talib as ta
-import orjson
+from mongoengine import DoesNotExist, DynamicDocument
+
+from app.config import settings
+from app.data_access import delete_document, get_all_document, get_document, get_klines_cache, insert_document
 
 # App
-from app.models import Strategies, Setting
-from app.schemas import StrategyRequest, SideEnum
-from app.data_access import (
-    insert_document,
-    get_document,
-    get_all_document,
-    delete_document,
-    get_klines_cache,
-)
-from app.config import settings
+from app.models import Setting, Strategies
+from app.schemas import SideEnum, StrategyRequest
 
 
 class StrategyServices:
@@ -119,7 +114,7 @@ class StrategyServices:
         return await delete_document(document=Strategies, _id=_id, name=name)
 
     @staticmethod
-    async def strategy_temp(pair: str, setting_db: Setting):
+    async def strategy_temp(pair: str, setting_db: Setting) -> SideEnum:
         """A temporal 'hard-coded' strategy with RSI to testing (todo remove)"""
 
         strategy_data: dict = await StrategyServices.get_strategy(_id=setting_db.strategy_id)

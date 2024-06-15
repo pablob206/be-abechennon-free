@@ -2,5 +2,5 @@
 
 # App
 from .binance_client import *
-from .binance_socket_engine import *
-from .binance_service import *
+from .binance_service import *  # type: ignore
+from .binance_socket_engine import *  # type: ignore

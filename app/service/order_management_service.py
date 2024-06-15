@@ -1,18 +1,15 @@
 """Order management service module"""
 
 # Third-Party
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # App
 from app.config import logger
-from app.service.binance import binance_client
+from app.data_access import get_orders_query, update_add_obj_query
 from app.models import Order
 from app.schemas import OrderRequest, TradingTypeEnum
-from app.data_access import (
-    update_add_obj_query,
-    get_orders_query,
-)
+from app.service.binance import binance_client
 
 
 class OrderManagementService:
@@ -69,7 +66,7 @@ class OrderManagementService:
         await update_add_obj_query(item=order_db, db_session=self.db_session)
 
         try:
-            order_resp = await binance_client().create_margin_order(
+            order_resp = await binance_client().create_margin_order(  # type: ignore
                 symbol=order.pair,
                 isIsolated=order.is_isolated,
                 side=order.side,

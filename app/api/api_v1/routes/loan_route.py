@@ -3,10 +3,11 @@
 # Third-Party
 from fastapi import APIRouter, status
 
+from app.api.deps import DBSessionDep
+from app.schemas import LoanOperationTypeEnum, LoanRequest
+
 # App
 from app.service import LoanService
-from app.schemas import LoanRequest, LoanOperationTypeEnum
-from app.api import DBSessionDep
 
 router = APIRouter()
 
@@ -17,7 +18,7 @@ router = APIRouter()
     response_model_exclude={"id"},
     status_code=status.HTTP_201_CREATED,
 )
-async def create_loan(loan_request: LoanRequest, db_session: DBSessionDep):
+async def create_loan(loan_request: LoanRequest, db_session: DBSessionDep) -> dict:
     """
     Create margin loan (only available for MARGIN trading type) \n
     - **:Request body:** \n
@@ -53,7 +54,7 @@ async def create_loan(loan_request: LoanRequest, db_session: DBSessionDep):
     response_model_exclude={"id"},
     status_code=status.HTTP_201_CREATED,
 )
-async def repay_loan(loan_request: LoanRequest, db_session: DBSessionDep):
+async def repay_loan(loan_request: LoanRequest, db_session: DBSessionDep) -> dict:
     """
     Repay margin loan (only available for MARGIN trading type) \n
     - **:Request body:** \n

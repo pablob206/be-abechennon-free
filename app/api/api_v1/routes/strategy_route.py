@@ -3,15 +3,16 @@
 # Third-Party
 from fastapi import APIRouter, status
 
+from app.schemas import StrategyRequest
+
 # App
 from app.service import StrategyServices
-from app.schemas import StrategyRequest
 
 router = APIRouter()
 
 
 @router.post(path="/strategy", summary="Add strategy", status_code=status.HTTP_201_CREATED)
-async def _add_strategy(strategy_req: StrategyRequest):
+async def add_strategy(strategy_req: StrategyRequest) -> dict:
     """
     Add strategy
     - **:Request body:** \n
@@ -49,11 +50,11 @@ async def _add_strategy(strategy_req: StrategyRequest):
             }
     """
 
-    return await add_strategy(strategy_req=strategy_req)
+    return await StrategyServices.add_strategy(strategy_req=strategy_req)
 
 
 @router.get(path="/strategy", summary="Get strategy", status_code=status.HTTP_200_OK)
-async def _get_strategy(_id: str | None = None, name: str | None = None):
+async def get_strategy(_id: str | None = None, name: str | None = None) -> dict:
     """
     Get strategy by 'id' or 'last' record
     - **:param _id:** str, strategy id. I.e: "6476298130c574e734a00b81"
@@ -120,7 +121,7 @@ async def _get_strategy(_id: str | None = None, name: str | None = None):
 
 
 @router.get(path="/strategy-list", summary="Get all strategy", status_code=status.HTTP_200_OK)
-async def _get_all_strategy():
+async def get_all_strategy() -> list:
     """
     Get all strategy
     - **:return:** dict, bot strategy. I.e: \n
@@ -193,11 +194,11 @@ async def _get_all_strategy():
     summary="Update partial strategy",
     status_code=status.HTTP_200_OK,
 )
-async def _update_strategy(
+async def update_strategy(
     strategy_req: StrategyRequest,
     _id: str | None = None,
     name: str | None = None,
-):
+) -> dict:
     """
     Update strategy by 'id'
     - **:param _id:** str, strategy id. I.e: "6476298130c574e734a00b81"
@@ -245,7 +246,7 @@ async def _update_strategy(
     summary="Delete strategy permanently",
     status_code=status.HTTP_200_OK,
 )
-async def _delete_strategy(_id: str | None = None, name: str | None = None):
+async def delete_strategy(_id: str | None = None, name: str | None = None) -> dict:
     """
     Delete strategy permanently by 'id'
     - **:param _id:** str, strategy id. I.e: "6476377060fe99e210eb2fa6"

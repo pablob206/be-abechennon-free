@@ -7,10 +7,10 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 # App
-from app.schemas import BotStatusEnum, TradingTypeEnum, OrdTypeEnum
+from app.schemas import BotStatusEnum, OrdTypeEnum, TradingTypeEnum
 
 
-class SettingBase(BaseModel):
+class SettingBaseResp(BaseModel):
     """Setting base"""
 
     binance_api_key: str = Field(None, title="Binance API Key")
@@ -41,7 +41,7 @@ class SettingBase(BaseModel):
     updated_at: datetime = Field(None, title="Updated At")
 
 
-class SettingResponse(SettingBase):
+class SettingResponse(SettingBaseResp):
     """Setting response schema"""
 
     id: int

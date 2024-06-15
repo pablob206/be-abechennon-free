@@ -2,22 +2,18 @@
 
 # Built-In
 from datetime import datetime
-from typing import Dict, List, Union, Any
+from typing import Any, Dict, List, Union
 
 # Third-Party
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.data_access import delete_obj_query, get_setting_query, update_add_obj_query, update_setting_query
+
 # App
 from app.models import Setting
-from app.schemas import SettingResponse, SettingRequest, SettingStatusEnum, CriptographyModeEnum
-from app.service import key_cryptography_proccess
-from app.data_access import (
-    get_setting_query,
-    update_add_obj_query,
-    update_setting_query,
-    delete_obj_query,
-)
+from app.schemas import CriptographyModeEnum, SettingRequest, SettingResponse, SettingStatusEnum
+from app.service.utilities import key_cryptography_proccess
 
 
 class SettingsService:

@@ -1,19 +1,19 @@
 """Main app module"""
 
 # Built-In
-import logging
-
 # Third-Party
 import asyncio
+import logging
+
 from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import ORJSONResponse
+
+from app.api import api_router
 
 # App
-from app.config import settings
-from app.api import api_router
+from app.config import get_cache_settings, settings
 from app.service.binance import init_binance_websocket_engine
-from app.config import get_cache_settings
 
 logger = logging.getLogger(name="WebSocketClient")
 
