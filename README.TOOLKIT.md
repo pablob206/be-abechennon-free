@@ -8,6 +8,7 @@ touch .env  # build .env/copy .env.sample
 pip install -r requirements.txt
 pip install -r requirements_dev.txt
 pip install -r requirements_test.txt
+uvicorn main:app --reload
 
 # black
 black .
